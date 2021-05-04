@@ -1,5 +1,7 @@
 package net.fwojtan.cosmacraft.init;
 
+import net.fwojtan.cosmacraft.common.block.DummyBlock;
+import net.fwojtan.cosmacraft.common.block.ParentBlock;
 import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
@@ -13,9 +15,8 @@ import java.util.function.Supplier;
 
 public class ModBlocks {
 
-    public static final RegistryObject<Block> DUMMY_BLOCK = register("dummy_block", () ->
-            new Block(AbstractBlock.Properties.of(Material.METAL).strength(3, 10).harvestLevel(2)
-                    .sound(SoundType.METAL).noOcclusion()));
+    public static final RegistryObject<Block> DUMMY_BLOCK = register("dummy_block", () -> new DummyBlock());
+    public static final RegistryObject<Block> PARENT_BLOCK = register("parent_block", () -> new ParentBlock());
 
 
     static void register() {}
