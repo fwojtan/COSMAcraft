@@ -18,7 +18,7 @@ import javax.annotation.Nullable;
 public class DummyBlock extends Block {
 
     public DummyBlock() {
-        super(AbstractBlock.Properties.of(Material.METAL, MaterialColor.COLOR_BLACK).strength(15f).sound(SoundType.METAL));
+        super(AbstractBlock.Properties.of(Material.METAL, MaterialColor.COLOR_BLACK).strength(15f).sound(SoundType.METAL).noOcclusion());
     }
 
     @Override

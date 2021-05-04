@@ -17,11 +17,6 @@ public class ParentBlock extends DummyBlock {
         super();
     }
 
-    @Override
-    public boolean hasTileEntity(BlockState state) {
-        return true;
-    }
-
     @Nullable
     @Override
     public TileEntity createTileEntity(BlockState state, IBlockReader world) {

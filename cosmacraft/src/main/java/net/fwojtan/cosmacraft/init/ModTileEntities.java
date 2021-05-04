@@ -15,7 +15,7 @@ public class ModTileEntities {
     public static final RegistryObject<TileEntityType<ParentTileEntity>> PARENT_TILE_ENTITY
             = Registration.TILE_ENTITY.register("parent_block", () ->
             TileEntityType.Builder.of(ParentTileEntity::new,
-                    ModBlocks.DUMMY_BLOCK.get()).build(null));
+                    ModBlocks.PARENT_BLOCK.get()).build(null));
 
     static void register() {}
 }
