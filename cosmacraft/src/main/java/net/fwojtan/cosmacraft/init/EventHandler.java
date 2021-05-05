@@ -21,4 +21,6 @@ public class EventHandler {
     public void onBlockBroken(BlockEvent.BreakEvent event){
         System.out.println("A block was broken yay");
     }
+
+
 }
