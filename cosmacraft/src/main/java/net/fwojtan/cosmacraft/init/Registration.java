@@ -30,7 +30,7 @@ public class Registration {
         ModContainers.register();
 
         // below would register the mod events class with the event bus
-        //ModEvents modEvents = new ModEvents();
-        //MinecraftForge.EVENT_BUS.register(modEvents);
+        EventHandler modEvents = new EventHandler();
+        MinecraftForge.EVENT_BUS.register(modEvents);
     }
 }

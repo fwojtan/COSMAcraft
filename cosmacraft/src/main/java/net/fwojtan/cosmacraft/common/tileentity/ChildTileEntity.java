@@ -7,7 +7,7 @@ import net.minecraft.util.math.BlockPos;
 
 public class ChildTileEntity extends TileEntity {
 
-    public BlockPos parentPosition;
+    public BlockPos parentPosition = null;
 
     public ChildTileEntity(TileEntityType<?> p_i48289_1_) {
         super(p_i48289_1_);

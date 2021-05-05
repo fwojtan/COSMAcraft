@@ -1,5 +1,6 @@
 package net.fwojtan.cosmacraft.common.block;
 
+import net.fwojtan.cosmacraft.common.tileentity.ParentTileEntity;
 import net.fwojtan.cosmacraft.init.ModTileEntities;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -13,9 +14,12 @@ import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Mirror;
 import net.minecraft.util.Rotation;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockReader;
+import net.minecraft.world.IWorld;
 
 import javax.annotation.Nullable;
+import java.util.List;
 
 public class ParentBlock extends DummyBlock {
 
@@ -51,5 +55,17 @@ public class ParentBlock extends DummyBlock {
     protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder) {
         super.createBlockStateDefinition(builder);
         builder.add(FACING);
+    }
+
+    @Override
+    public void destroy(IWorld world, BlockPos pos, BlockState state) {
+        /*
+        ParentTileEntity entity = (ParentTileEntity) world.getBlockEntity(pos);
+        List<BlockPos> childPosList = entity.getChildPositionList();
+        for (BlockPos childPos : childPosList){
+            world.destroyBlock(childPos, false);
+        }
+        */
+        super.destroy(world, pos, state);
     }
 }

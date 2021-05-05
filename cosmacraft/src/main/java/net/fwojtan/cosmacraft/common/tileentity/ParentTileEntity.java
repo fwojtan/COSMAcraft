@@ -11,12 +11,16 @@ import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.vector.Vector3i;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static net.fwojtan.cosmacraft.common.block.ParentBlock.FACING;
 
 public class ParentTileEntity extends TileEntity implements ITickableTileEntity {
 
     private boolean childrenPlaced = false;
     public Direction parentDirection;
+    private List<BlockPos> childPositionList;
 
     public ParentTileEntity(TileEntityType<?> p_i48289_1_) {
         super(p_i48289_1_);
@@ -39,16 +43,26 @@ public class ParentTileEntity extends TileEntity implements ITickableTileEntity 
         BlockState state = getBlockState();
         parentDirection = state.getValue(FACING);
 
+        childPositionList = createChildPositonList();
+
         if (!getLevel().isClientSide()) {
-            getLevel().setBlock(getChildPosition(0, 0, 1), ModBlocks.DUMMY_BLOCK.get().defaultBlockState(), 3);
-            getLevel().setBlock(getChildPosition(1, 0, 1), Blocks.STONE.defaultBlockState(), 3);
-            getLevel().setBlock(getChildPosition(-1, 0, 1), Blocks.SAND.defaultBlockState(), 3);
+            for (BlockPos childPosition : childPositionList) {
+                getLevel().setBlock(childPosition, ModBlocks.DUMMY_BLOCK.get().defaultBlockState(), 3);
+                ChildTileEntity entity = (ChildTileEntity) getLevel().getBlockEntity(childPosition);
+                entity.parentPosition = getBlockPos();
+            }
+
+
+
         }
     }
 
     // TO-DO: Fix the rotation-aware placement of child blocks
 
-    private BlockPos getChildPosition(int x, int y, int z){
+    private BlockPos getChildPosition(Vector3i vec){
+        int x = vec.getX();
+        int y = vec.getY();
+        int z = vec.getZ();
         Vector3i translation;
 
         // north is -ve z direction
@@ -56,25 +70,37 @@ public class ParentTileEntity extends TileEntity implements ITickableTileEntity 
         // west is -ve x direction
         // east is +ve x direction
 
-        System.out.println(parentDirection);
-        System.out.println(getBlockState());
-
         switch (parentDirection){
             case SOUTH:
-                System.out.println("We went south");
                 translation = new Vector3i(-x, y, -z); break;
             case EAST:
-                System.out.println("We went east");
-                translation = new Vector3i(z, y, -x); break;
-            case WEST:
-                System.out.println("We went west");
                 translation = new Vector3i(-z, y, x); break;
+            case WEST:
+                translation = new Vector3i(z, y, -x); break;
             default:
-                System.out.println("We went north");
                 translation = new Vector3i(x, y, z); break;
         }
 
         return getBlockPos().offset(translation);
+    }
+
+    // should refactor this to a translation list and instead make a list of actual BLockPos!!!
+    public List<BlockPos> createChildPositonList() {
+        List<Vector3i> offsetList = new ArrayList<Vector3i>();
+        List<BlockPos> retList = new ArrayList<BlockPos>();
+        offsetList.add(new Vector3i(0, 0, 1));
+        offsetList.add(new Vector3i(0, 1, 1));
+        offsetList.add(new Vector3i(0, 2, 1));
+        offsetList.add(new Vector3i(0, 1, 0));
+        offsetList.add(new Vector3i(0, 2, 0));
+        for (Vector3i vec : offsetList){
+           retList.add(getChildPosition(vec));
+        }
+        return retList;
+    }
+
+    public List<BlockPos> getChildPositionList() {
+        return this.childPositionList;
     }
 
 }
