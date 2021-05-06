@@ -1,7 +1,10 @@
 {
   "variants": {
-    "": [
-      {"model": "minecraft:block/air"}
-    ]
+    "should_render=true": {
+      "model": "cosmacraft:block/basic_rack"
+    },
+    "should_render=false": {
+      "model": "minecraft:block/air"
+    }
   }
 }

@@ -5,6 +5,7 @@ import net.minecraft.block.Block;
 import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.item.Item;
 import net.minecraft.tileentity.TileEntityType;
+import net.minecraftforge.client.model.obj.OBJLoader;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
@@ -32,5 +33,7 @@ public class Registration {
         // below would register the mod events class with the event bus
         EventHandler modEvents = new EventHandler();
         MinecraftForge.EVENT_BUS.register(modEvents);
+
+
     }
 }

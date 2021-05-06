@@ -1,14 +1,19 @@
 package net.fwojtan.cosmacraft.init;
 
 import net.fwojtan.cosmacraft.CosmaCraft;
+import net.fwojtan.cosmacraft.client.ter.RackTileEntityRenderer;
 import net.fwojtan.cosmacraft.common.tileentity.ChildTileEntity;
 import net.fwojtan.cosmacraft.common.tileentity.ParentTileEntity;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.RenderTypeLookup;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IWorld;
+import net.minecraftforge.client.model.obj.OBJLoader;
+import net.minecraftforge.client.model.obj.OBJModel;
 import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 
@@ -19,6 +24,15 @@ public class EventHandler {
     public static void setupRenderLayers(FMLClientSetupEvent event) {
         System.out.println("Fin's registry event happened");
         RenderTypeLookup.setRenderLayer(ModBlocks.DUMMY_BLOCK.get(), RenderType.cutout());
+
+        ClientRegistry.bindTileEntityRenderer(ModTileEntities.PARENT_TILE_ENTITY.get(), RackTileEntityRenderer::new);
+
+        //ResourceLocation modelLocation = new ResourceLocation(CosmaCraft.MOD_ID, "models/block/basic_rack.obj");
+
+        //ResourceLocation materialLocation = new ResourceLocation(CosmaCraft.MOD_ID, "models/block");
+        //OBJModel.ModelSettings settings = new OBJModel.ModelSettings(modelLocation, true, true, false, false, null);
+        //OBJLoader.INSTANCE.loadModel(settings);
+        //OBJLoader.INSTANCE.loadMaterialLibrary(materialLocation);
     }
 
     @SubscribeEvent
