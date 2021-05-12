@@ -35,13 +35,11 @@ public class RackTileEntityRenderer extends TileEntityRenderer<ParentTileEntity>
     }
 
     private Minecraft mc = Minecraft.getInstance();
-    private long startTime;
 
     @Override
     public void render(ParentTileEntity parentTileEntity, float partialTicks, MatrixStack matrixStack, IRenderTypeBuffer renderBuffers,
                        int combinedLight, int combinedOverlay) {
 
-        startTime = System.nanoTime();
         matrixStack.pushPose();
 
 
@@ -87,9 +85,8 @@ public class RackTileEntityRenderer extends TileEntityRenderer<ParentTileEntity>
             dispatcher.getModelRenderer().renderModel(parentTileEntity.getLevel(), hexServerModel, hexState, parentTileEntity.getBlockPos(), matrixStack, vertexBuffer, true, random, combinedLight, combinedOverlay, EmptyModelData.INSTANCE);
             matrixStack.translate(0.0d, 0.11573d, 0.0d);
         }
-        //dispatcher.getModelRenderer().renderModel(parentTileEntity.getLevel(), hexServerModel, hexState, parentTileEntity.getBlockPos(), matrixStack, vertexBuffer, true, random, combinedLight, combinedOverlay, EmptyModelData.INSTANCE);
         matrixStack.popPose();
-        System.out.printf("%d,%n", System.nanoTime()-startTime);
+
 
 
 
