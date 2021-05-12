@@ -1,3 +1,3 @@
 # COSMAcraft
-Master's project code. Includes minecraft mod, webserver and associated tools. 
+Master's project code. Includes minecraft mod and python tools. 
 
