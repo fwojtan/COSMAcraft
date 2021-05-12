@@ -1,7 +1,7 @@
 {
   "variants": {
     "should_render=true": {
-      "model": "cosmacraft:block/cosma7_rack"
+      "model": "cosmacraft:block/r740_hex"
     },
     "should_render=false": {
       "model": "minecraft:block/air"

@@ -35,11 +35,13 @@ public class RackTileEntityRenderer extends TileEntityRenderer<ParentTileEntity>
     }
 
     private Minecraft mc = Minecraft.getInstance();
+    private long startTime;
 
     @Override
     public void render(ParentTileEntity parentTileEntity, float partialTicks, MatrixStack matrixStack, IRenderTypeBuffer renderBuffers,
                        int combinedLight, int combinedOverlay) {
 
+        startTime = System.nanoTime();
         matrixStack.pushPose();
 
 
@@ -52,7 +54,7 @@ public class RackTileEntityRenderer extends TileEntityRenderer<ParentTileEntity>
         IVertexBuilder vertexBuffer = renderBuffers.getBuffer(RenderType.cutoutMipped());
         Random random = new Random();
 
-        ResourceLocation location = new ResourceLocation(CosmaCraft.MOD_ID, "models/block/basic_rack");
+        ResourceLocation location = new ResourceLocation(CosmaCraft.MOD_ID, "models/block/cosma7_rack");
 
         //IBakedModel model = dispatcher.getBlockModelShaper().getModelManager().getModel(location);
 
@@ -74,10 +76,21 @@ public class RackTileEntityRenderer extends TileEntityRenderer<ParentTileEntity>
         //below for renderer that wants entry instead of full stack?
         //MatrixStack.Entry currentMatrix = matrixStack.last();
 
+
+
         dispatcher.getModelRenderer().renderModel(parentTileEntity.getLevel(), model, state, parentTileEntity.getBlockPos(), matrixStack, vertexBuffer, true, random, combinedLight, combinedOverlay, EmptyModelData.INSTANCE);
 
+        BlockState hexState = ModBlocks.SERVER_MODEL_BLOCK.get().defaultBlockState().setValue(SHOULD_RENDER, true);
+        IBakedModel hexServerModel = dispatcher.getBlockModel(hexState);
 
+        for (int i=0; i<21; i++){
+            dispatcher.getModelRenderer().renderModel(parentTileEntity.getLevel(), hexServerModel, hexState, parentTileEntity.getBlockPos(), matrixStack, vertexBuffer, true, random, combinedLight, combinedOverlay, EmptyModelData.INSTANCE);
+            matrixStack.translate(0.0d, 0.11573d, 0.0d);
+        }
+        //dispatcher.getModelRenderer().renderModel(parentTileEntity.getLevel(), hexServerModel, hexState, parentTileEntity.getBlockPos(), matrixStack, vertexBuffer, true, random, combinedLight, combinedOverlay, EmptyModelData.INSTANCE);
         matrixStack.popPose();
+        System.out.printf("%d,%n", System.nanoTime()-startTime);
+
 
 
     }
