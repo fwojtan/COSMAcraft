@@ -3,7 +3,9 @@ package net.fwojtan.cosmacraft.client.ter;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
 import net.fwojtan.cosmacraft.CosmaCraft;
+import net.fwojtan.cosmacraft.common.block.ServerBlock;
 import net.fwojtan.cosmacraft.common.tileentity.ParentTileEntity;
+import net.fwojtan.cosmacraft.common.utils.ServerType;
 import net.fwojtan.cosmacraft.init.ModBlocks;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.Minecraft;
@@ -27,6 +29,7 @@ import org.lwjgl.system.CallbackI;
 import java.util.Random;
 
 import static net.fwojtan.cosmacraft.common.block.ParentBlock.SHOULD_RENDER;
+import static net.fwojtan.cosmacraft.common.block.ServerBlock.RENDER_CHOICE;
 
 public class RackTileEntityRenderer extends TileEntityRenderer<ParentTileEntity> {
 
@@ -45,40 +48,18 @@ public class RackTileEntityRenderer extends TileEntityRenderer<ParentTileEntity>
 
         Direction direction = parentTileEntity.getBlockState().getValue(BlockStateProperties.HORIZONTAL_FACING);
 
-
-        BlockState state = ModBlocks.PARENT_BLOCK.get().defaultBlockState().setValue(SHOULD_RENDER, true);
         BlockRendererDispatcher dispatcher = mc.getBlockRenderer();
-        IBakedModel model = dispatcher.getBlockModel(state);
+
+
         IVertexBuilder vertexBuffer = renderBuffers.getBuffer(RenderType.cutoutMipped());
         Random random = new Random();
 
-        ResourceLocation location = new ResourceLocation(CosmaCraft.MOD_ID, "models/block/cosma7_rack");
-
-        //IBakedModel model = dispatcher.getBlockModelShaper().getModelManager().getModel(location);
 
 
         rotateStack(direction, matrixStack);
-        //Vector3d translation = translation(direction, 0.5d, 1.5d, 1.0d);
-        //Vector3f scale = scale(direction, 0.66f, 0.66f, 0.66f);
-        //matrixStack.translate(translation.x, translation.y, translation.z);
-        //matrixStack.scale(scale.x(), scale.y(), scale.z());
+        renderServerFrame(parentTileEntity, matrixStack, vertexBuffer, random, combinedLight, combinedOverlay);
 
-        // this rotation system does not yet work... :-(
-
-        //shift forwards and down
-        //Vector3d secondTranslation = translation(direction, 0.0d, -0.2d, -0.175d);
-        //matrixStack.translate(secondTranslation.x, secondTranslation.y, secondTranslation.z);
-
-
-
-        //below for renderer that wants entry instead of full stack?
-        //MatrixStack.Entry currentMatrix = matrixStack.last();
-
-
-
-        dispatcher.getModelRenderer().renderModel(parentTileEntity.getLevel(), model, state, parentTileEntity.getBlockPos(), matrixStack, vertexBuffer, true, random, combinedLight, combinedOverlay, EmptyModelData.INSTANCE);
-
-        BlockState hexState = ModBlocks.SERVER_MODEL_BLOCK.get().defaultBlockState().setValue(SHOULD_RENDER, true);
+        BlockState hexState =  ModBlocks.SERVER_MODEL_BLOCK.get().defaultBlockState().setValue(RENDER_CHOICE, ServerType.TWO_U_HEX);
         IBakedModel hexServerModel = dispatcher.getBlockModel(hexState);
 
         for (int i=0; i<21; i++){
@@ -92,8 +73,19 @@ public class RackTileEntityRenderer extends TileEntityRenderer<ParentTileEntity>
 
     }
 
+    private void renderServers(ParentTileEntity parentTileEntity, MatrixStack matrixStack, IVertexBuilder vertexBuffer, Random random, int combinedLight, int combinedOverlay){
+        ServerType[] serverTypes = ParentTileEntity.serverTypes;
+        /*
+        for (ServerType serverType : serverTypes){
+            serverType;
+        }
+        */
+    }
+
 
     private void rotateStack(Direction direction, MatrixStack matrixStack) {
+        // includes some correction translations for some weird offsets that creeped in somewhere
+
         switch (direction) {
             case SOUTH:
                 matrixStack.mulPose(Vector3f.YP.rotationDegrees(180f));
@@ -108,6 +100,15 @@ public class RackTileEntityRenderer extends TileEntityRenderer<ParentTileEntity>
                 matrixStack.translate(0.0d, 0.0d, -1.0d);
                 break;
         }
+    }
+
+    private void renderServerFrame(ParentTileEntity parentTileEntity, MatrixStack matrixStack, IVertexBuilder vertexBuffer, Random random, int combinedLight, int combinedOverlay) {
+        BlockState state = ModBlocks.PARENT_BLOCK.get().defaultBlockState().setValue(SHOULD_RENDER, true);
+        BlockRendererDispatcher dispatcher = mc.getBlockRenderer();
+        IBakedModel model = dispatcher.getBlockModel(state);
+
+        dispatcher.getModelRenderer().renderModel(parentTileEntity.getLevel(), model, state, parentTileEntity.getBlockPos(), matrixStack, vertexBuffer, true, random, combinedLight, combinedOverlay, EmptyModelData.INSTANCE);
+
     }
 
     private Vector3d translation(Direction direction, double x, double y, double z){

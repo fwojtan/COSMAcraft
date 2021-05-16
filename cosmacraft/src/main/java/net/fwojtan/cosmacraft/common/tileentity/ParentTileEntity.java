@@ -1,5 +1,6 @@
 package net.fwojtan.cosmacraft.common.tileentity;
 
+import net.fwojtan.cosmacraft.common.utils.ServerType;
 import net.fwojtan.cosmacraft.init.ModBlocks;
 import net.fwojtan.cosmacraft.init.ModTileEntities;
 import net.minecraft.block.BlockState;
@@ -21,6 +22,8 @@ public class ParentTileEntity extends TileEntity implements ITickableTileEntity 
     private boolean childrenPlaced = false;
     public Direction parentDirection;
     private List<BlockPos> childPositionList;
+
+    public static ServerType[] serverTypes = new ServerType[42];
 
     public ParentTileEntity(TileEntityType<?> p_i48289_1_) {
         super(p_i48289_1_);
