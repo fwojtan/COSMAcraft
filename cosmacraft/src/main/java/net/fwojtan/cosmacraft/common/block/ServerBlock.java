@@ -27,7 +27,7 @@ public class ServerBlock extends Block {
     @Nullable
     @Override
     public BlockState getStateForPlacement(BlockItemUseContext context) {
-        return this.defaultBlockState().setValue(RENDER_CHOICE, ServerType.NONE);
+        return this.defaultBlockState().setValue(RENDER_CHOICE, ServerType.ONE_U_GAP);
     }
 
     @Override

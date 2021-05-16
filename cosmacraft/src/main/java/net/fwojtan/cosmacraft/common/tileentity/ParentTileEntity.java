@@ -20,10 +20,11 @@ import static net.fwojtan.cosmacraft.common.block.ParentBlock.FACING;
 public class ParentTileEntity extends TileEntity implements ITickableTileEntity {
 
     private boolean childrenPlaced = false;
+    private boolean listInitialized = false;
     public Direction parentDirection;
     private List<BlockPos> childPositionList;
 
-    public static ServerType[] serverTypes = new ServerType[42];
+    public static List<ServerType> serverTypes;
 
     public ParentTileEntity(TileEntityType<?> p_i48289_1_) {
         super(p_i48289_1_);
@@ -38,6 +39,18 @@ public class ParentTileEntity extends TileEntity implements ITickableTileEntity 
     @Override
     public void tick() {
         if (!childrenPlaced && getBlockState() != null){placeChildren();childrenPlaced=true;}
+        if (!listInitialized){
+            serverTypes = new ArrayList<ServerType>();
+            for (int i=0; i<5; i++){
+                serverTypes.add(ServerType.TWO_U_HEX);
+            }
+            for (int i=0; i<5; i++){
+                serverTypes.add(ServerType.ONE_U_GAP);
+            }
+            for (int i=0; i<5; i++){
+                serverTypes.add(ServerType.TWO_U_HORIZONTAL_DRIVES);
+            }
+        }
 
 
     }

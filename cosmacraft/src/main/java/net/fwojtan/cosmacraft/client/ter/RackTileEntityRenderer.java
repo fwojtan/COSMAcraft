@@ -26,6 +26,7 @@ import net.minecraftforge.client.model.data.EmptyModelData;
 import net.minecraftforge.client.model.obj.OBJLoader;
 import org.lwjgl.system.CallbackI;
 
+import java.util.List;
 import java.util.Random;
 
 import static net.fwojtan.cosmacraft.common.block.ParentBlock.SHOULD_RENDER;
@@ -57,15 +58,9 @@ public class RackTileEntityRenderer extends TileEntityRenderer<ParentTileEntity>
 
 
         rotateStack(direction, matrixStack);
-        renderServerFrame(parentTileEntity, matrixStack, vertexBuffer, random, combinedLight, combinedOverlay);
+        renderServerFrame(parentTileEntity, matrixStack, vertexBuffer, random, combinedLight, combinedOverlay, dispatcher);
+        renderServers(parentTileEntity, matrixStack, vertexBuffer, random, combinedLight, combinedOverlay, dispatcher);
 
-        BlockState hexState =  ModBlocks.SERVER_MODEL_BLOCK.get().defaultBlockState().setValue(RENDER_CHOICE, ServerType.TWO_U_HEX);
-        IBakedModel hexServerModel = dispatcher.getBlockModel(hexState);
-
-        for (int i=0; i<21; i++){
-            dispatcher.getModelRenderer().renderModel(parentTileEntity.getLevel(), hexServerModel, hexState, parentTileEntity.getBlockPos(), matrixStack, vertexBuffer, true, random, combinedLight, combinedOverlay, EmptyModelData.INSTANCE);
-            matrixStack.translate(0.0d, 0.11573d, 0.0d);
-        }
         matrixStack.popPose();
 
 
@@ -73,21 +68,30 @@ public class RackTileEntityRenderer extends TileEntityRenderer<ParentTileEntity>
 
     }
 
-    private void renderServers(ParentTileEntity parentTileEntity, MatrixStack matrixStack, IVertexBuilder vertexBuffer, Random random, int combinedLight, int combinedOverlay){
-        ServerType[] serverTypes = ParentTileEntity.serverTypes;
+    private void renderServers(ParentTileEntity parentTileEntity, MatrixStack matrixStack, IVertexBuilder vertexBuffer, Random random, int combinedLight, int combinedOverlay, BlockRendererDispatcher dispatcher){
+        List<ServerType> serverTypes = ParentTileEntity.serverTypes;
+        BlockState state;
+        int uGap = 0;
 
         for (ServerType serverType : serverTypes){
-            matrixStack.translate(0.0d, 0.057865d, 0.0d);
-
             switch (serverType) {
                 case TWO_U_HEX:
-
-                case NONE:
-                default:
+                    state = ModBlocks.SERVER_MODEL_BLOCK.get().defaultBlockState().setValue(RENDER_CHOICE, ServerType.TWO_U_HEX);
+                    renderIndividualServer(state, parentTileEntity, matrixStack, vertexBuffer, random, combinedLight, combinedOverlay, dispatcher);
                     break;
+                case ONE_U_GAP:
+                    break;
+
             }
+            uGap = serverType.getU_height();
+            matrixStack.translate(0.0d, 0.057865d*uGap, 0.0d);
         }
 
+    }
+
+    private void renderIndividualServer(BlockState state, ParentTileEntity parentTileEntity, MatrixStack matrixStack, IVertexBuilder vertexBuffer, Random random, int combinedLight, int combinedOverlay, BlockRendererDispatcher dispatcher){
+        IBakedModel model = dispatcher.getBlockModel(state);
+        dispatcher.getModelRenderer().renderModel(parentTileEntity.getLevel(), model, state, parentTileEntity.getBlockPos(), matrixStack, vertexBuffer, true, random, combinedLight, combinedOverlay, EmptyModelData.INSTANCE);
     }
 
 
@@ -110,11 +114,9 @@ public class RackTileEntityRenderer extends TileEntityRenderer<ParentTileEntity>
         }
     }
 
-    private void renderServerFrame(ParentTileEntity parentTileEntity, MatrixStack matrixStack, IVertexBuilder vertexBuffer, Random random, int combinedLight, int combinedOverlay) {
+    private void renderServerFrame(ParentTileEntity parentTileEntity, MatrixStack matrixStack, IVertexBuilder vertexBuffer, Random random, int combinedLight, int combinedOverlay, BlockRendererDispatcher dispatcher) {
         BlockState state = ModBlocks.PARENT_BLOCK.get().defaultBlockState().setValue(SHOULD_RENDER, true);
-        BlockRendererDispatcher dispatcher = mc.getBlockRenderer();
         IBakedModel model = dispatcher.getBlockModel(state);
-
         dispatcher.getModelRenderer().renderModel(parentTileEntity.getLevel(), model, state, parentTileEntity.getBlockPos(), matrixStack, vertexBuffer, true, random, combinedLight, combinedOverlay, EmptyModelData.INSTANCE);
 
     }
