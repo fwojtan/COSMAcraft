@@ -8,6 +8,7 @@ import net.fwojtan.cosmacraft.common.tileentity.ParentTileEntity;
 import net.fwojtan.cosmacraft.common.utils.ServerType;
 import net.fwojtan.cosmacraft.init.ModBlocks;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BlockRendererDispatcher;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
@@ -77,6 +78,10 @@ public class RackTileEntityRenderer extends TileEntityRenderer<ParentTileEntity>
             switch (serverType) {
                 case TWO_U_HEX:
                     state = ModBlocks.SERVER_MODEL_BLOCK.get().defaultBlockState().setValue(RENDER_CHOICE, ServerType.TWO_U_HEX);
+                    renderIndividualServer(state, parentTileEntity, matrixStack, vertexBuffer, random, combinedLight, combinedOverlay, dispatcher);
+                    break;
+                case ONE_U_HORIZONTAL_DRIVES:
+                    state = ModBlocks.SERVER_MODEL_BLOCK.get().defaultBlockState().setValue(RENDER_CHOICE, ServerType.ONE_U_HORIZONTAL_DRIVES);
                     renderIndividualServer(state, parentTileEntity, matrixStack, vertexBuffer, random, combinedLight, combinedOverlay, dispatcher);
                     break;
                 case ONE_U_GAP:

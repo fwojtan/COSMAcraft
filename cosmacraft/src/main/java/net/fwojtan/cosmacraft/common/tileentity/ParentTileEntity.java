@@ -47,9 +47,13 @@ public class ParentTileEntity extends TileEntity implements ITickableTileEntity 
             for (int i=0; i<5; i++){
                 serverTypes.add(ServerType.ONE_U_GAP);
             }
+            serverTypes.add(ServerType.TWO_U_HEX);
             for (int i=0; i<5; i++){
-                serverTypes.add(ServerType.TWO_U_HORIZONTAL_DRIVES);
+                serverTypes.add(ServerType.ONE_U_HORIZONTAL_DRIVES);
             }
+            serverTypes.add(ServerType.TWO_U_HEX);
+
+            listInitialized = true;
         }
 
 

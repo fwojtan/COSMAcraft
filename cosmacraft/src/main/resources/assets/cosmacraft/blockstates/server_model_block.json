@@ -6,7 +6,7 @@
     "server_type=one_u_gap": {
       "model": "minecraft:block/air"
     },
-    "server_type=two_u_horizontal_drives": {
+    "server_type=one_u_horizontal_drives": {
       "model": "cosmacraft:block/horizontal_drives"
     }
   }

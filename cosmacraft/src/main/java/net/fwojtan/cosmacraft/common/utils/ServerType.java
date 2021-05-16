@@ -5,7 +5,7 @@ import net.minecraft.util.IStringSerializable;
 public enum ServerType implements IStringSerializable {
     ONE_U_GAP("one_u_gap", 1),
     TWO_U_HEX("two_u_hex", 2),
-    TWO_U_HORIZONTAL_DRIVES("two_u_horizontal_drives", 2);
+    ONE_U_HORIZONTAL_DRIVES("one_u_horizontal_drives", 1);
 
     private final String name;
     private final int u_height;
