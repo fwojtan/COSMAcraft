@@ -75,11 +75,19 @@ public class RackTileEntityRenderer extends TileEntityRenderer<ParentTileEntity>
 
     private void renderServers(ParentTileEntity parentTileEntity, MatrixStack matrixStack, IVertexBuilder vertexBuffer, Random random, int combinedLight, int combinedOverlay){
         ServerType[] serverTypes = ParentTileEntity.serverTypes;
-        /*
+
         for (ServerType serverType : serverTypes){
-            serverType;
+            matrixStack.translate(0.0d, 0.057865d, 0.0d);
+
+            switch (serverType) {
+                case TWO_U_HEX:
+
+                case NONE:
+                default:
+                    break;
+            }
         }
-        */
+
     }
 
 

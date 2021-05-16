@@ -1,10 +1,13 @@
 {
   "variants": {
-    "should_render=true": {
+    "server_type=two_u_hex": {
       "model": "cosmacraft:block/r740_hex"
     },
-    "should_render=false": {
+    "server_type=none": {
       "model": "minecraft:block/air"
+    },
+    "server_type=two_u_horizontal_drives": {
+      "model": "cosmacraft:block/two_u_horizontal_drives"
     }
   }
 }
