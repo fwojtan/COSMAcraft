@@ -9,7 +9,9 @@ import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.Direction;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.math.vector.Vector3i;
 
 import java.util.ArrayList;
@@ -104,6 +106,31 @@ public class ParentTileEntity extends TileEntity implements ITickableTileEntity 
         return getBlockPos().offset(translation);
     }
 
+    private Vector3d getBBOffset(){
+        switch (parentDirection) {
+            case SOUTH:
+                return new Vector3d(0d, 1d, -0.5d);
+            case EAST:
+                return new Vector3d(-0.5d, 1d, 0d);
+
+            case WEST:
+                return new Vector3d(0.5d, 1d, 0d);
+            default:
+                return new Vector3d(0d, 1d, 0.5d);
+        }
+    }
+
+    private Vector3d getBBInflate(){
+        switch (parentDirection) {
+
+            case EAST:
+            case WEST:
+                return new Vector3d(0.5d, 1d, 0d);
+            default:
+                return new Vector3d(0d, 1d, 0.5d);
+        }
+    }
+
     // should refactor this to a translation list and instead make a list of actual BLockPos!!!
     public List<BlockPos> createChildPositonList() {
         List<Vector3i> offsetList = new ArrayList<Vector3i>();
@@ -122,5 +149,14 @@ public class ParentTileEntity extends TileEntity implements ITickableTileEntity 
     public List<BlockPos> getChildPositionList() {
         return this.childPositionList;
     }
+
+    @Override
+    public AxisAlignedBB getRenderBoundingBox() {
+        if (parentDirection != null) {
+            Vector3d inflation = getBBInflate();
+            return super.getRenderBoundingBox().inflate(inflation.x, inflation.y, inflation.z).move(getBBOffset());
+        } else {return super.getRenderBoundingBox();}
+    }
+
 
 }
