@@ -43,17 +43,26 @@ public class ParentTileEntity extends TileEntity implements ITickableTileEntity 
         if (!childrenPlaced && getBlockState() != null){placeChildren();childrenPlaced=true;}
         if (!listInitialized){
             serverTypes = new ArrayList<ServerType>();
-            for (int i=0; i<5; i++){
+            for (int i=0; i<3; i++){
                 serverTypes.add(ServerType.TWO_U_HEX);
             }
-            for (int i=0; i<5; i++){
-                serverTypes.add(ServerType.ONE_U_GAP);
+            for (int i=0; i<3; i++){
+                serverTypes.add(ServerType.R740_HEX_FLAT);
             }
-            serverTypes.add(ServerType.TWO_U_HEX);
-            for (int i=0; i<5; i++){
+
+            for (int i=0; i<2; i++){
                 serverTypes.add(ServerType.ONE_U_HORIZONTAL_DRIVES);
             }
+
+            serverTypes.add(ServerType.MELLANOX_EDR);
             serverTypes.add(ServerType.TWO_U_HEX);
+
+            for (int i=0; i<5; i++){
+                serverTypes.add(ServerType.C_6525);
+            }
+
+            serverTypes.add(ServerType.ME_484);
+            serverTypes.add(ServerType.MD_3420);
 
             listInitialized = true;
         }

@@ -47,56 +47,29 @@ public class RackTileEntityRenderer extends TileEntityRenderer<ParentTileEntity>
 
         matrixStack.pushPose();
 
-
-        Direction direction = parentTileEntity.getBlockState().getValue(BlockStateProperties.HORIZONTAL_FACING);
-
-        BlockRendererDispatcher dispatcher = mc.getBlockRenderer();
-
-
         IVertexBuilder vertexBuffer = renderBuffers.getBuffer(RenderType.cutoutMipped());
         Random random = new Random();
 
-
-
-        rotateStack(direction, matrixStack);
-        renderServerFrame(parentTileEntity, matrixStack, vertexBuffer, random, combinedLight, combinedOverlay, dispatcher);
-        renderServers(parentTileEntity, matrixStack, vertexBuffer, random, combinedLight, combinedOverlay, dispatcher);
+        rotateStack(parentTileEntity.getBlockState().getValue(BlockStateProperties.HORIZONTAL_FACING), matrixStack);
+        renderServerFrame(parentTileEntity, matrixStack, vertexBuffer, random, combinedLight, combinedOverlay);
+        renderServers(parentTileEntity, matrixStack, vertexBuffer, random, combinedLight, combinedOverlay);
 
         matrixStack.popPose();
 
 
-
-
     }
 
-    private void renderServers(ParentTileEntity parentTileEntity, MatrixStack matrixStack, IVertexBuilder vertexBuffer, Random random, int combinedLight, int combinedOverlay, BlockRendererDispatcher dispatcher){
-        List<ServerType> serverTypes = ParentTileEntity.serverTypes;
-        BlockState state;
-        int uGap = 0;
+    private void renderServers(ParentTileEntity parentTileEntity, MatrixStack matrixStack, IVertexBuilder vertexBuffer, Random random, int combinedLight, int combinedOverlay){
 
-        for (ServerType serverType : serverTypes){
-            switch (serverType) {
-                case TWO_U_HEX:
-                    state = ModBlocks.SERVER_MODEL_BLOCK.get().defaultBlockState().setValue(RENDER_CHOICE, ServerType.TWO_U_HEX);
-                    renderIndividualServer(state, parentTileEntity, matrixStack, vertexBuffer, random, combinedLight, combinedOverlay, dispatcher);
-                    break;
-                case ONE_U_HORIZONTAL_DRIVES:
-                    state = ModBlocks.SERVER_MODEL_BLOCK.get().defaultBlockState().setValue(RENDER_CHOICE, ServerType.ONE_U_HORIZONTAL_DRIVES);
-                    renderIndividualServer(state, parentTileEntity, matrixStack, vertexBuffer, random, combinedLight, combinedOverlay, dispatcher);
-                    break;
-                case ONE_U_GAP:
-                    break;
+        for (ServerType serverType : ParentTileEntity.serverTypes){
 
+            if (serverType.shouldRender) {
+                mc.getBlockRenderer().getModelRenderer().renderModel(parentTileEntity.getLevel(), serverType.getModel(), serverType.getState(), parentTileEntity.getBlockPos(), matrixStack, vertexBuffer, true, random, combinedLight, combinedOverlay, EmptyModelData.INSTANCE);
             }
-            uGap = serverType.getU_height();
-            matrixStack.translate(0.0d, 0.057865d*uGap, 0.0d);
+
+            matrixStack.translate(0.0d, 0.057865d*serverType.getUHeight(), 0.0d);
         }
 
-    }
-
-    private void renderIndividualServer(BlockState state, ParentTileEntity parentTileEntity, MatrixStack matrixStack, IVertexBuilder vertexBuffer, Random random, int combinedLight, int combinedOverlay, BlockRendererDispatcher dispatcher){
-        IBakedModel model = dispatcher.getBlockModel(state);
-        dispatcher.getModelRenderer().renderModel(parentTileEntity.getLevel(), model, state, parentTileEntity.getBlockPos(), matrixStack, vertexBuffer, true, random, combinedLight, combinedOverlay, EmptyModelData.INSTANCE);
     }
 
 
@@ -119,10 +92,10 @@ public class RackTileEntityRenderer extends TileEntityRenderer<ParentTileEntity>
         }
     }
 
-    private void renderServerFrame(ParentTileEntity parentTileEntity, MatrixStack matrixStack, IVertexBuilder vertexBuffer, Random random, int combinedLight, int combinedOverlay, BlockRendererDispatcher dispatcher) {
+    private void renderServerFrame(ParentTileEntity parentTileEntity, MatrixStack matrixStack, IVertexBuilder vertexBuffer, Random random, int combinedLight, int combinedOverlay) {
         BlockState state = ModBlocks.PARENT_BLOCK.get().defaultBlockState().setValue(SHOULD_RENDER, true);
-        IBakedModel model = dispatcher.getBlockModel(state);
-        dispatcher.getModelRenderer().renderModel(parentTileEntity.getLevel(), model, state, parentTileEntity.getBlockPos(), matrixStack, vertexBuffer, true, random, combinedLight, combinedOverlay, EmptyModelData.INSTANCE);
+        IBakedModel model = mc.getBlockRenderer().getBlockModel(state);
+        mc.getBlockRenderer().getModelRenderer().renderModel(parentTileEntity.getLevel(), model, state, parentTileEntity.getBlockPos(), matrixStack, vertexBuffer, true, random, combinedLight, combinedOverlay, EmptyModelData.INSTANCE);
 
     }
 

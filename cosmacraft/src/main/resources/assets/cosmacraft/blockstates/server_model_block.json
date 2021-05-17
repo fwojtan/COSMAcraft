@@ -8,6 +8,21 @@
     },
     "server_type=one_u_horizontal_drives": {
       "model": "cosmacraft:block/horizontal_drives"
+    },
+    "server_type=c_6525": {
+      "model": "cosmacraft:block/c_6525"
+    },
+    "server_type=me484": {
+      "model": "cosmacraft:block/me484"
+    },
+    "server_type=md3420": {
+      "model": "cosmacraft:block/md3420"
+    },
+    "server_type=r740_hex_flat": {
+      "model": "cosmacraft:block/r740_hex_flat"
+    },
+    "server_type=mellanox_edr_switch": {
+      "model": "cosmacraft:block/mellanox_switch"
     }
   }
 }
