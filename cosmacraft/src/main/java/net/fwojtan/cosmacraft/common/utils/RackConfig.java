@@ -8,7 +8,7 @@ public class RackConfig {
     public int y;
     public int z;
     public String facing;
-    public List<Integer> servers;
+    public List<String> servers;
     public String frontDoor;
     public String backDoor;
     public String rackStyle;

@@ -3,6 +3,7 @@ package net.fwojtan.cosmacraft.init;
 import net.fwojtan.cosmacraft.CosmaCraft;
 import net.fwojtan.cosmacraft.client.ter.RackTileEntityRenderer;
 import net.fwojtan.cosmacraft.common.tileentity.ChildTileEntity;
+import net.fwojtan.cosmacraft.common.tileentity.CosmaControlTileEntity;
 import net.fwojtan.cosmacraft.common.tileentity.ParentTileEntity;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.RenderTypeLookup;
@@ -41,6 +42,17 @@ public class EventHandler {
         if (event.getWorld().getBlockEntity(event.getPos()) instanceof ParentTileEntity){
             IWorld world = event.getWorld();
             ParentTileEntity entity = (ParentTileEntity)  event.getWorld().getBlockEntity(event.getPos());
+            if (entity.getChildPositionList() != null){
+                for (BlockPos pos : entity.getChildPositionList()){
+                    world.destroyBlock(pos, false);
+                }
+            }
+
+        }
+
+        if (event.getWorld().getBlockEntity(event.getPos()) instanceof CosmaControlTileEntity){
+            IWorld world = event.getWorld();
+            CosmaControlTileEntity entity = (CosmaControlTileEntity)  event.getWorld().getBlockEntity(event.getPos());
             if (entity.getChildPositionList() != null){
                 for (BlockPos pos : entity.getChildPositionList()){
                     world.destroyBlock(pos, false);

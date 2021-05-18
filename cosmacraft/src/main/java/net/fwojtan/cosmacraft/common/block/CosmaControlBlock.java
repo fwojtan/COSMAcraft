@@ -1,5 +1,6 @@
 package net.fwojtan.cosmacraft.common.block;
 
+import net.fwojtan.cosmacraft.common.tileentity.CosmaControlTileEntity;
 import net.fwojtan.cosmacraft.init.ModTileEntities;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -16,7 +17,7 @@ public class CosmaControlBlock extends ParentBlock {
     @Nullable
     @Override
     public TileEntity createTileEntity(BlockState state, IBlockReader world) {
-        return ModTileEntities.COSMA_CONTROL_TILE_ENTITY.get().create();
+        return new CosmaControlTileEntity();
     }
 
 

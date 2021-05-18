@@ -54,17 +54,17 @@ public class RackTileEntityRenderer extends TileEntityRenderer<RackTileEntity> {
 
         rotateStack(rackTileEntity.getBlockState().getValue(BlockStateProperties.HORIZONTAL_FACING), matrixStack);
         renderServerFrame(rackTileEntity, matrixStack, vertexBuffer, random, combinedLight, combinedOverlay);
-        renderServers(rackTileEntity, matrixStack, vertexBuffer, random, combinedLight, combinedOverlay);
 
+        if (rackTileEntity.getListInitialized()) {
+            renderServers(rackTileEntity, matrixStack, vertexBuffer, random, combinedLight, combinedOverlay);
+        }
         matrixStack.popPose();
 
 
     }
 
     private void renderServers(RackTileEntity rackTileEntity, MatrixStack matrixStack, IVertexBuilder vertexBuffer, Random random, int combinedLight, int combinedOverlay){
-
-        for (ServerType serverType : RackTileEntity.serverTypes){
-
+        for (ServerType serverType : rackTileEntity.serverTypes){
             if (serverType.shouldRender) {
                 mc.getBlockRenderer().getModelRenderer().renderModel(rackTileEntity.getLevel(), serverType.getModel(), serverType.getState(), rackTileEntity.getBlockPos(), matrixStack, vertexBuffer, true, random, combinedLight, combinedOverlay, EmptyModelData.INSTANCE);
             }

@@ -2,29 +2,36 @@ package net.fwojtan.cosmacraft.common.tileentity;
 
 import net.fwojtan.cosmacraft.common.utils.ServerType;
 import net.fwojtan.cosmacraft.init.ModTileEntities;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.network.NetworkManager;
+import net.minecraft.network.play.server.SUpdateTileEntityPacket;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntityType;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.math.vector.Vector3i;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
 public class RackTileEntity extends ParentTileEntity {
 
-    public static List<ServerType> serverTypes;
+    public List<ServerType> serverTypes = new ArrayList<>();
     private boolean listInitialized = false;
     private BlockPos controllerPosition;
 
     public RackTileEntity(TileEntityType<?> type){super(type);}
     public RackTileEntity(){this(ModTileEntities.RACK_TILE_ENTITY.get());}
 
+
     @Override
     public void tick() {
         super.tick();
-        if (!listInitialized){createServerList();}
+        //if (!listInitialized){createServerList();}
 
     }
 
@@ -108,5 +115,52 @@ public class RackTileEntity extends ParentTileEntity {
 
     public BlockPos getControllerPosition(){
         return this.controllerPosition;
+    }
+
+    public Boolean getListInitialized(){
+        return listInitialized;
+    }
+    public void setListInitialized(Boolean bool){
+        listInitialized = bool;
+    }
+
+    // the below two overrides handle updates from the server thread
+    @Nullable
+    @Override
+    public SUpdateTileEntityPacket getUpdatePacket() {
+        CompoundNBT nbtTag = new CompoundNBT();
+        //write data into nbtTag
+        int[] serverTypeIntArray = new int[this.serverTypes.size()];
+        for (int i=0; i<this.serverTypes.size(); i++){
+            serverTypeIntArray[i] = serverTypes.get(i).getIndex();
+        }
+        nbtTag.putIntArray("serverTypes",serverTypeIntArray);
+        nbtTag.putBoolean("listInitialized", this.listInitialized);
+        nbtTag.putInt("controllerXPos", this.controllerPosition.getX());
+        nbtTag.putInt("controllerYPos", this.controllerPosition.getY());
+        nbtTag.putInt("controllerZPos", this.controllerPosition.getZ());
+
+        System.out.println("Sending update tag");
+
+        return new SUpdateTileEntityPacket(getBlockPos(), -1, nbtTag);
+    }
+
+    @Override
+    public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt) {
+        CompoundNBT nbtTag = pkt.getTag();
+        System.out.println("Received update tag");
+
+        int[] serverTypeIntArray = nbtTag.getIntArray("serverTypes");
+        this.listInitialized = nbtTag.getBoolean("listInitialized");
+        this.controllerPosition = new BlockPos(
+                nbtTag.getInt("controllerXPos"),
+                nbtTag.getInt("controllerYPos"),
+                nbtTag.getInt("controllerZPos"));
+        for (int i=0; i<serverTypeIntArray.length; i++){
+            this.serverTypes.add(ServerType.getTypeFromIndex(serverTypeIntArray[i]));
+        }
+
+
+
     }
 }
