@@ -21,56 +21,23 @@ import static net.fwojtan.cosmacraft.common.block.ParentBlock.FACING;
 
 public class ParentTileEntity extends TileEntity implements ITickableTileEntity {
 
-    private boolean childrenPlaced = false;
-    private boolean listInitialized = false;
+    public boolean childrenPlaced = false;
     public Direction parentDirection;
     private List<BlockPos> childPositionList;
 
-    public static List<ServerType> serverTypes;
 
     public ParentTileEntity(TileEntityType<?> p_i48289_1_) {
         super(p_i48289_1_);
     }
 
-    public ParentTileEntity() {
-
-        this(ModTileEntities.PARENT_TILE_ENTITY.get());
-
-    }
+    public ParentTileEntity() {this(ModTileEntities.PARENT_TILE_ENTITY.get()); }
 
     @Override
     public void tick() {
         if (!childrenPlaced && getBlockState() != null){placeChildren();childrenPlaced=true;}
-        if (!listInitialized){
-            serverTypes = new ArrayList<ServerType>();
-            for (int i=0; i<3; i++){
-                serverTypes.add(ServerType.TWO_U_HEX);
-            }
-            for (int i=0; i<3; i++){
-                serverTypes.add(ServerType.R740_HEX_FLAT);
-            }
-
-            for (int i=0; i<2; i++){
-                serverTypes.add(ServerType.ONE_U_HORIZONTAL_DRIVES);
-            }
-
-            serverTypes.add(ServerType.MELLANOX_EDR);
-            serverTypes.add(ServerType.TWO_U_HEX);
-
-            for (int i=0; i<5; i++){
-                serverTypes.add(ServerType.C_6525);
-            }
-
-            serverTypes.add(ServerType.ME_484);
-            serverTypes.add(ServerType.MD_3420);
-
-            listInitialized = true;
-        }
-
-
     }
 
-    private void placeChildren() {
+    public void placeChildren() {
         BlockState state = getBlockState();
         parentDirection = state.getValue(FACING);
 
@@ -82,15 +49,10 @@ public class ParentTileEntity extends TileEntity implements ITickableTileEntity 
                 ChildTileEntity entity = (ChildTileEntity) getLevel().getBlockEntity(childPosition);
                 entity.parentPosition = getBlockPos();
             }
-
-
-
         }
     }
 
-    // TO-DO: Fix the rotation-aware placement of child blocks
-
-    private BlockPos getChildPosition(Vector3i vec){
+    public BlockPos getChildPosition(Vector3i vec){
         int x = vec.getX();
         int y = vec.getY();
         int z = vec.getZ();
@@ -115,40 +77,12 @@ public class ParentTileEntity extends TileEntity implements ITickableTileEntity 
         return getBlockPos().offset(translation);
     }
 
-    private Vector3d getBBOffset(){
-        switch (parentDirection) {
-            case SOUTH:
-                return new Vector3d(0d, 1d, -0.5d);
-            case EAST:
-                return new Vector3d(-0.5d, 1d, 0d);
 
-            case WEST:
-                return new Vector3d(0.5d, 1d, 0d);
-            default:
-                return new Vector3d(0d, 1d, 0.5d);
-        }
-    }
-
-    private Vector3d getBBInflate(){
-        switch (parentDirection) {
-
-            case EAST:
-            case WEST:
-                return new Vector3d(0.5d, 1d, 0d);
-            default:
-                return new Vector3d(0d, 1d, 0.5d);
-        }
-    }
-
-    // should refactor this to a translation list and instead make a list of actual BLockPos!!!
     public List<BlockPos> createChildPositonList() {
         List<Vector3i> offsetList = new ArrayList<Vector3i>();
         List<BlockPos> retList = new ArrayList<BlockPos>();
+        // add more children at the desired relative coordinates here when overriding
         offsetList.add(new Vector3i(0, 0, 1));
-        offsetList.add(new Vector3i(0, 1, 1));
-        offsetList.add(new Vector3i(0, 2, 1));
-        offsetList.add(new Vector3i(0, 1, 0));
-        offsetList.add(new Vector3i(0, 2, 0));
         for (Vector3i vec : offsetList){
            retList.add(getChildPosition(vec));
         }
@@ -159,13 +93,6 @@ public class ParentTileEntity extends TileEntity implements ITickableTileEntity 
         return this.childPositionList;
     }
 
-    @Override
-    public AxisAlignedBB getRenderBoundingBox() {
-        if (parentDirection != null) {
-            Vector3d inflation = getBBInflate();
-            return super.getRenderBoundingBox().inflate(inflation.x, inflation.y, inflation.z).move(getBBOffset());
-        } else {return super.getRenderBoundingBox();}
-    }
 
 
 }

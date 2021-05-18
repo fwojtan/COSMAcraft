@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "should_render=true": {
+      "model": "cosmacraft:block/cosma7_rack"
+    },
+    "should_render=false": {
+      "model": "minecraft:block/air"
+    }
+  }
+}

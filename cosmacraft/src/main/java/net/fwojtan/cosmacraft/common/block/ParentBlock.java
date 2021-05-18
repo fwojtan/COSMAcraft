@@ -26,7 +26,7 @@ import java.util.List;
 public class ParentBlock extends DummyBlock {
 
     public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
-    public static final Property<Boolean> SHOULD_RENDER = BooleanProperty.create("should_render");
+
 
     public ParentBlock() {
         super();
@@ -51,15 +51,13 @@ public class ParentBlock extends DummyBlock {
     @Nullable
     @Override
     public BlockState getStateForPlacement(BlockItemUseContext context) {
-        return this.defaultBlockState().setValue(FACING, context.getHorizontalDirection().getOpposite())
-                .setValue(SHOULD_RENDER, false);
+        return this.defaultBlockState().setValue(FACING, context.getHorizontalDirection().getOpposite());
     }
 
     @Override
     protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder) {
         super.createBlockStateDefinition(builder);
         builder.add(FACING);
-        builder.add(SHOULD_RENDER);
     }
 
     @Override

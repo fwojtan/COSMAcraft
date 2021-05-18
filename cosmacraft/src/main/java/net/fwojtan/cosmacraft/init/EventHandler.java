@@ -25,7 +25,7 @@ public class EventHandler {
         System.out.println("Fin's registry event happened");
         RenderTypeLookup.setRenderLayer(ModBlocks.DUMMY_BLOCK.get(), RenderType.cutout());
 
-        ClientRegistry.bindTileEntityRenderer(ModTileEntities.PARENT_TILE_ENTITY.get(), RackTileEntityRenderer::new);
+        ClientRegistry.bindTileEntityRenderer(ModTileEntities.RACK_TILE_ENTITY.get(), RackTileEntityRenderer::new);
 
         //ResourceLocation modelLocation = new ResourceLocation(CosmaCraft.MOD_ID, "models/block/basic_rack.obj");
 
@@ -41,9 +41,10 @@ public class EventHandler {
         if (event.getWorld().getBlockEntity(event.getPos()) instanceof ParentTileEntity){
             IWorld world = event.getWorld();
             ParentTileEntity entity = (ParentTileEntity)  event.getWorld().getBlockEntity(event.getPos());
-
-            for (BlockPos pos : entity.getChildPositionList()){
-                world.destroyBlock(pos, false);
+            if (entity.getChildPositionList() != null){
+                for (BlockPos pos : entity.getChildPositionList()){
+                    world.destroyBlock(pos, false);
+                }
             }
 
         }
