@@ -8,6 +8,7 @@ import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SUpdateTileEntityPacket;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntityType;
+import net.minecraft.util.Direction;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
@@ -134,6 +135,7 @@ public class RackTileEntity extends ParentTileEntity {
         for (int i=0; i<this.serverTypes.size(); i++){
             serverTypeIntArray[i] = serverTypes.get(i).getIndex();
         }
+        nbtTag.putString("direction", parentDirection.name());
         nbtTag.putIntArray("serverTypes",serverTypeIntArray);
         nbtTag.putBoolean("listInitialized", this.listInitialized);
         nbtTag.putInt("controllerXPos", this.controllerPosition.getX());
@@ -159,8 +161,22 @@ public class RackTileEntity extends ParentTileEntity {
         for (int i=0; i<serverTypeIntArray.length; i++){
             this.serverTypes.add(ServerType.getTypeFromIndex(serverTypeIntArray[i]));
         }
+        this.parentDirection = getDirectionFromString(nbtTag.getString("direction"));
 
 
 
+    }
+
+    private Direction getDirectionFromString(String string){
+        switch (string){
+            case "south":
+                return Direction.SOUTH;
+            case "west":
+                return Direction.WEST;
+            case "east":
+                return Direction.EAST;
+            default:
+                return Direction.NORTH;
+        }
     }
 }

@@ -9,6 +9,7 @@ public class RackConfig {
     public int z;
     public String facing;
     public List<String> servers;
+    public List<String> names;
     public String frontDoor;
     public String backDoor;
     public String rackStyle;
