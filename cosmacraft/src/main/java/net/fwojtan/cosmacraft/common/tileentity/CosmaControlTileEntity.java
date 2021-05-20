@@ -87,6 +87,7 @@ public class CosmaControlTileEntity extends ParentTileEntity{
                         rackTileEntity.setControllerPosition(getBlockPos());
                         rackTileEntity.serverTypes = this.createServerList(rackConfig.servers);
                         rackTileEntity.parentDirection = childState.getValue(FACING);
+                        rackTileEntity.createFreshStateList();
                         rackTileEntity.setListInitialized(true);
 
                     }

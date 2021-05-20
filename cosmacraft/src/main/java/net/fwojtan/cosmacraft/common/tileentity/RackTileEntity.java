@@ -1,8 +1,11 @@
 package net.fwojtan.cosmacraft.common.tileentity;
 
+import net.fwojtan.cosmacraft.common.utils.ServerState;
 import net.fwojtan.cosmacraft.common.utils.ServerType;
 import net.fwojtan.cosmacraft.init.ModTileEntities;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SUpdateTileEntityPacket;
@@ -23,6 +26,7 @@ import java.util.List;
 public class RackTileEntity extends ParentTileEntity {
 
     public List<ServerType> serverTypes = new ArrayList<>();
+    public List<ServerState> serverStates = new ArrayList<>();
     private boolean listInitialized = false;
     private BlockPos controllerPosition;
 
@@ -133,15 +137,21 @@ public class RackTileEntity extends ParentTileEntity {
         CompoundNBT nbtTag = new CompoundNBT();
         //write data into nbtTag
         int[] serverTypeIntArray = new int[this.serverTypes.size()];
+        int[] serverStateIntArray = new int[this.serverTypes.size()];
         for (int i=0; i<this.serverTypes.size(); i++){
             serverTypeIntArray[i] = serverTypes.get(i).getIndex();
+            serverStateIntArray[i] = serverStates.get(i).ejected;
         }
         nbtTag.putString("direction", parentDirection.name());
         nbtTag.putIntArray("serverTypes",serverTypeIntArray);
+        nbtTag.putIntArray("serverStatesEjected", serverStateIntArray);
         nbtTag.putBoolean("listInitialized", this.listInitialized);
         nbtTag.putInt("controllerXPos", this.controllerPosition.getX());
         nbtTag.putInt("controllerYPos", this.controllerPosition.getY());
         nbtTag.putInt("controllerZPos", this.controllerPosition.getZ());
+
+
+
 
         System.out.println("Sending update tag");
 
@@ -154,13 +164,17 @@ public class RackTileEntity extends ParentTileEntity {
         System.out.println("Received update tag");
 
         int[] serverTypeIntArray = nbtTag.getIntArray("serverTypes");
+        int [] serverStateIntArray = nbtTag.getIntArray("serverStatesEjected");
         this.listInitialized = nbtTag.getBoolean("listInitialized");
         this.controllerPosition = new BlockPos(
                 nbtTag.getInt("controllerXPos"),
                 nbtTag.getInt("controllerYPos"),
                 nbtTag.getInt("controllerZPos"));
+        this.serverTypes = new ArrayList<>();
+        this.serverStates = new ArrayList<>();
         for (int i=0; i<serverTypeIntArray.length; i++){
             this.serverTypes.add(ServerType.getTypeFromIndex(serverTypeIntArray[i]));
+            this.serverStates.add(new ServerState("a", serverStateIntArray[i]));
         }
         this.parentDirection = getDirectionFromString(nbtTag.getString("direction"));
 
@@ -181,11 +195,26 @@ public class RackTileEntity extends ParentTileEntity {
         }
     }
 
-    public void onUse(double yHit, double yAngle){
+    public void onUse(double yHit, double yAngle, ItemStack item, boolean shiftKeyDown){
 
-        System.out.println(yHit-getBlockPos().getY());
-        System.out.println(getServerListIndexFromY(yHit-getBlockPos().getY()));
-        System.out.println(yAngle);
+        double serverOffset = 0.15;
+
+        // I think (?) the line below should correct the parallax error in the Y
+        double serverHeight = yHit-getBlockPos().getY() - serverOffset * Math.tan(Math.acos(yAngle) - Math.PI / 2);
+        int serverHitIndex = getServerListIndexFromY(serverHeight);
+
+        if (item.sameItem(Items.STICK.getDefaultInstance())) {
+            this.serverStates.get(serverHitIndex).ejected = 1;
+            System.out.println("Ejecting server");
+        }
+
+        if (shiftKeyDown) {
+            System.out.println("Triggered server de-eject");
+            for (ServerState serverState : serverStates) {
+                serverState.ejected = 0;
+            }
+
+        }
 
 
     }
@@ -204,5 +233,11 @@ public class RackTileEntity extends ParentTileEntity {
     public void destroyChildren(){
         System.out.println(this.childPositionList);
         System.out.println(this.childPositionList.get(0));
+    }
+
+    public void createFreshStateList(){
+        for (ServerType serverType : serverTypes){
+            this.serverStates.add(new ServerState("a", 0));
+        }
     }
 }

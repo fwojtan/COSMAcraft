@@ -6,6 +6,7 @@ import net.fwojtan.cosmacraft.CosmaCraft;
 import net.fwojtan.cosmacraft.common.block.ServerBlock;
 import net.fwojtan.cosmacraft.common.tileentity.ParentTileEntity;
 import net.fwojtan.cosmacraft.common.tileentity.RackTileEntity;
+import net.fwojtan.cosmacraft.common.utils.ServerState;
 import net.fwojtan.cosmacraft.common.utils.ServerType;
 import net.fwojtan.cosmacraft.init.ModBlocks;
 import net.minecraft.block.BlockState;
@@ -64,9 +65,48 @@ public class RackTileEntityRenderer extends TileEntityRenderer<RackTileEntity> {
     }
 
     private void renderServers(RackTileEntity rackTileEntity, MatrixStack matrixStack, IVertexBuilder vertexBuffer, Random random, int combinedLight, int combinedOverlay){
-        for (ServerType serverType : rackTileEntity.serverTypes){
+        for (int i = 0; i<rackTileEntity.serverTypes.size(); i++){
+            ServerType serverType = rackTileEntity.serverTypes.get(i);
+            ServerState serverState = rackTileEntity.serverStates.get(i);
             if (serverType.shouldRender) {
+
+                // move matrix stack in the right direction for the server to be ejected forwards
+                if (serverState.ejected == 1 || serverState.ejectProgress>0) {
+                    double ejectAmount = 0.4 * (1-Math.cos(Math.PI*serverState.ejectProgress/50.0d));
+                    switch (rackTileEntity.parentDirection){
+                        case EAST:
+                            matrixStack.translate(0.0d, 0.0d, -ejectAmount);break;
+                        case WEST:
+                            matrixStack.translate(0.0d, 0.0d, ejectAmount);break;
+                        case SOUTH:
+                            matrixStack.translate(-ejectAmount, 0.0d, 0.0d);break;
+                        default:
+                            matrixStack.translate(ejectAmount, 0.0d, 0.0d);break;
+                    }
+                }
+
+
                 mc.getBlockRenderer().getModelRenderer().renderModel(rackTileEntity.getLevel(), serverType.getModel(), serverType.getState(), rackTileEntity.getBlockPos(), matrixStack, vertexBuffer, true, random, combinedLight, combinedOverlay, EmptyModelData.INSTANCE);
+
+
+                // move the matrix stack back so the rest of the servers can be rendered in the correct place
+                if (serverState.ejected == 1 || serverState.ejectProgress>0) {
+                    double ejectAmount = 0.4 * (1-Math.cos(Math.PI*serverState.ejectProgress/50.0d));
+                    switch (rackTileEntity.parentDirection){
+                        case EAST:
+                            matrixStack.translate(0.0d, 0.0d, ejectAmount);break;
+                        case WEST:
+                            matrixStack.translate(0.0d, 0.0d, -ejectAmount);break;
+                        case SOUTH:
+                            matrixStack.translate(ejectAmount, 0.0d, 0.0d);break;
+                        default:
+                            matrixStack.translate(-ejectAmount, 0.0d, 0.0d);break;
+                    }
+                }
+
+                if (serverState.ejectProgress<50 && serverState.ejected==1) serverState.ejectProgress++;
+                if (serverState.ejected == 0 && serverState.ejectProgress>0) serverState.ejectProgress--;
+
             }
 
             matrixStack.translate(0.0d, 0.057865d*serverType.getUHeight(), 0.0d);
@@ -101,27 +141,4 @@ public class RackTileEntityRenderer extends TileEntityRenderer<RackTileEntity> {
 
     }
 
-    private Vector3d translation(Direction direction, double x, double y, double z){
-        Vector3d vec = new Vector3d(x, y, z);
-        switch (direction) {
-            case SOUTH:
-                return vec.yRot(180f);
-            case WEST:
-                return vec.yRot(90f);
-            case EAST:
-                return vec.yRot(270f);
-            default:
-                return vec;
-        }
-    }
-
-    private Vector3f scale(Direction direction, float xscale, float yscale, float zscale) {
-        switch (direction) {
-            case WEST:
-            case EAST:
-                return new Vector3f(zscale, yscale, xscale);
-            default:
-                return new Vector3f(xscale, yscale, zscale);
-        }
-    }
 }

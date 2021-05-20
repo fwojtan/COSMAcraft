@@ -50,14 +50,18 @@ public class DummyBlock extends Block {
             if (tileEntity instanceof ChildTileEntity){
                 TileEntity parentEntity = world.getBlockEntity(((ChildTileEntity) tileEntity).parentPosition);
                 if (parentEntity instanceof RackTileEntity){
-                    ((RackTileEntity) parentEntity).onUse(yHit, yAngle);
+                    ((RackTileEntity) parentEntity).onUse(yHit, yAngle, player.getMainHandItem(), player.isShiftKeyDown());
                 }
             } else if (tileEntity instanceof RackTileEntity) {
-                ((RackTileEntity) tileEntity).onUse(yHit, yAngle);
+                ((RackTileEntity) tileEntity).onUse(yHit, yAngle, player.getMainHandItem(), player.isShiftKeyDown());
             }
 
 
+
         }
+
+
+
         return super.use(state, world, pos, player, hand, rayTraceResult);
     }
 }
