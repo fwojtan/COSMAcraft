@@ -1,5 +1,7 @@
 package net.fwojtan.cosmacraft.common.block;
 
+import net.fwojtan.cosmacraft.common.tileentity.ChildTileEntity;
+import net.fwojtan.cosmacraft.common.tileentity.RackTileEntity;
 import net.fwojtan.cosmacraft.init.ModTileEntities;
 import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.Block;
@@ -7,11 +9,16 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.material.MaterialColor;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.tags.ITag;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.ActionResultType;
+import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.world.IBlockReader;
+import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
 
@@ -30,5 +37,24 @@ public class DummyBlock extends Block {
     @Override
     public TileEntity createTileEntity(BlockState state, IBlockReader world) {
         return new ModTileEntities().CHILD_TILE_ENTITY.get().create();
+    }
+
+    @Override
+    public ActionResultType use(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult rayTraceResult) {
+        double yHit = rayTraceResult.getLocation().y;
+        TileEntity tileEntity = world.getBlockEntity(pos);
+        if (world.getBlockEntity(pos) != null) {
+            if (tileEntity instanceof ChildTileEntity){
+                TileEntity parentEntity = world.getBlockEntity(((ChildTileEntity) tileEntity).parentPosition);
+                if (parentEntity instanceof RackTileEntity){
+                    ((RackTileEntity) parentEntity).onUse(yHit);
+                }
+            } else if (tileEntity instanceof RackTileEntity) {
+                ((RackTileEntity) tileEntity).onUse(yHit);
+            }
+
+
+        }
+        return super.use(state, world, pos, player, hand, rayTraceResult);
     }
 }

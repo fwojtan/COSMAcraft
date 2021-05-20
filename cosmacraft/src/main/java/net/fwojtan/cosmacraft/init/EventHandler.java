@@ -7,6 +7,7 @@ import net.fwojtan.cosmacraft.common.tileentity.CosmaControlTileEntity;
 import net.fwojtan.cosmacraft.common.tileentity.ParentTileEntity;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.RenderTypeLookup;
+import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IWorld;

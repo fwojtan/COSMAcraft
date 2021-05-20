@@ -44,13 +44,16 @@ public class ParentTileEntity extends TileEntity implements ITickableTileEntity 
 
         childPositionList = createChildPositonList();
 
-        if (!getLevel().isClientSide()) {
-            for (BlockPos childPosition : childPositionList) {
+
+        for (BlockPos childPosition : childPositionList) {
+            if (!getLevel().isClientSide()) {
                 getLevel().setBlock(childPosition, ModBlocks.DUMMY_BLOCK.get().defaultBlockState(), 3);
                 ChildTileEntity entity = (ChildTileEntity) getLevel().getBlockEntity(childPosition);
                 entity.parentPosition = getBlockPos();
             }
+            getLevel().sendBlockUpdated(childPosition, ModBlocks.DUMMY_BLOCK.get().defaultBlockState(), ModBlocks.DUMMY_BLOCK.get().defaultBlockState(), 2);
         }
+
     }
 
     public BlockPos getChildPosition(Vector3i vec){

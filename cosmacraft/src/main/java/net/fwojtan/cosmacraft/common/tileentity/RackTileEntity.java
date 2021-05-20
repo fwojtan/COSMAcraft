@@ -12,6 +12,7 @@ import net.minecraft.util.Direction;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.math.vector.Vector3i;
 
@@ -178,5 +179,14 @@ public class RackTileEntity extends ParentTileEntity {
             default:
                 return Direction.NORTH;
         }
+    }
+
+    public void onUse(double yHit){
+        double rackBlockY = getBlockPos().getY();
+        System.out.println(yHit-rackBlockY);
+
+
+
+
     }
 }
