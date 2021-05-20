@@ -5,6 +5,7 @@ import net.fwojtan.cosmacraft.init.ModBlocks;
 import net.fwojtan.cosmacraft.init.ModTileEntities;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityType;
@@ -24,7 +25,7 @@ public class ParentTileEntity extends TileEntity implements ITickableTileEntity 
 
     public boolean childrenPlaced = false;
     public Direction parentDirection;
-    private List<BlockPos> childPositionList;
+    public List<BlockPos> childPositionList;
 
 
     public ParentTileEntity(TileEntityType<?> p_i48289_1_) {
@@ -96,7 +97,5 @@ public class ParentTileEntity extends TileEntity implements ITickableTileEntity 
     public List<BlockPos> getChildPositionList() {
         return this.childPositionList;
     }
-
-
 
 }

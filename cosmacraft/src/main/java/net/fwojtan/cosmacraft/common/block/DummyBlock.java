@@ -17,6 +17,8 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.shapes.VoxelShape;
+import net.minecraft.util.math.vector.Quaternion;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 
@@ -42,15 +44,16 @@ public class DummyBlock extends Block {
     @Override
     public ActionResultType use(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult rayTraceResult) {
         double yHit = rayTraceResult.getLocation().y;
+        double yAngle = player.getLookAngle().y;
         TileEntity tileEntity = world.getBlockEntity(pos);
         if (world.getBlockEntity(pos) != null) {
             if (tileEntity instanceof ChildTileEntity){
                 TileEntity parentEntity = world.getBlockEntity(((ChildTileEntity) tileEntity).parentPosition);
                 if (parentEntity instanceof RackTileEntity){
-                    ((RackTileEntity) parentEntity).onUse(yHit);
+                    ((RackTileEntity) parentEntity).onUse(yHit, yAngle);
                 }
             } else if (tileEntity instanceof RackTileEntity) {
-                ((RackTileEntity) tileEntity).onUse(yHit);
+                ((RackTileEntity) tileEntity).onUse(yHit, yAngle);
             }
 
 

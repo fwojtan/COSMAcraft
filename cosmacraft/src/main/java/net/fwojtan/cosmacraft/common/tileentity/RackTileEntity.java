@@ -181,12 +181,28 @@ public class RackTileEntity extends ParentTileEntity {
         }
     }
 
-    public void onUse(double yHit){
-        double rackBlockY = getBlockPos().getY();
-        System.out.println(yHit-rackBlockY);
+    public void onUse(double yHit, double yAngle){
+
+        System.out.println(yHit-getBlockPos().getY());
+        System.out.println(getServerListIndexFromY(yHit-getBlockPos().getY()));
+        System.out.println(yAngle);
 
 
+    }
 
+    private int getServerListIndexFromY(double y){
+        if (y > 2.667) return -1;
+        double uHeight = 42 * y / 2.667;
+        int serverU = 0;
+        for (int i=0; i<serverTypes.size(); i++){
+            serverU += serverTypes.get(i).getUHeight();
+            if (serverU > uHeight) return i;
+        }
+        return 0;
+    }
 
+    public void destroyChildren(){
+        System.out.println(this.childPositionList);
+        System.out.println(this.childPositionList.get(0));
     }
 }

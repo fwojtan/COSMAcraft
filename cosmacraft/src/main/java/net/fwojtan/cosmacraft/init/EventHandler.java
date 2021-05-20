@@ -11,6 +11,7 @@ import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IWorld;
+import net.minecraft.world.World;
 import net.minecraftforge.client.model.obj.OBJLoader;
 import net.minecraftforge.client.model.obj.OBJModel;
 import net.minecraftforge.event.world.BlockEvent;
@@ -40,27 +41,7 @@ public class EventHandler {
     @SubscribeEvent
     public void onBlockBroken(BlockEvent.BreakEvent event){
 
-        if (event.getWorld().getBlockEntity(event.getPos()) instanceof ParentTileEntity){
-            IWorld world = event.getWorld();
-            ParentTileEntity entity = (ParentTileEntity)  event.getWorld().getBlockEntity(event.getPos());
-            if (entity.getChildPositionList() != null){
-                for (BlockPos pos : entity.getChildPositionList()){
-                    world.destroyBlock(pos, false);
-                }
-            }
-
-        }
-
-        if (event.getWorld().getBlockEntity(event.getPos()) instanceof CosmaControlTileEntity){
-            IWorld world = event.getWorld();
-            CosmaControlTileEntity entity = (CosmaControlTileEntity)  event.getWorld().getBlockEntity(event.getPos());
-            if (entity.getChildPositionList() != null){
-                for (BlockPos pos : entity.getChildPositionList()){
-                    world.destroyBlock(pos, false);
-                }
-            }
-
-        }
+        checkAndDestroyParent(event.getWorld(), event.getPos());
 
         if (event.getWorld().getBlockEntity(event.getPos()) instanceof ChildTileEntity){
             IWorld world = event.getWorld();
@@ -72,6 +53,19 @@ public class EventHandler {
                 world.destroyBlock(pos, false);
             }
             world.destroyBlock(childTileEntity.parentPosition, true);
+        }
+    }
+
+    private void checkAndDestroyParent(IWorld world, BlockPos pos){
+        if (world.getBlockEntity(pos) instanceof ParentTileEntity){
+            ParentTileEntity entity = (ParentTileEntity)  world.getBlockEntity(pos);
+            if (entity.getChildPositionList() != null){
+                for (BlockPos childPos : entity.getChildPositionList()){
+                    checkAndDestroyParent(world, childPos);
+                    world.destroyBlock(childPos, false);
+                }
+            }
+
         }
     }
 

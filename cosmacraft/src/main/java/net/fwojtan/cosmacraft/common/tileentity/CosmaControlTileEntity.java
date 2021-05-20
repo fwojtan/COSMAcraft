@@ -49,6 +49,8 @@ public class CosmaControlTileEntity extends ParentTileEntity{
     @Override
     public void placeChildren() {
 
+        childPositionList = new ArrayList<>();
+
         parentDirection = getBlockState().getValue(FACING);
         List<RackConfig> rackConfigList;
         Type rackConfigType = new TypeToken<ArrayList<RackConfig>>(){}.getType();
@@ -91,7 +93,7 @@ public class CosmaControlTileEntity extends ParentTileEntity{
 
                     // and then after they're created we mark them for an update on the render thread
                     getLevel().sendBlockUpdated(childPos, childState, childState, 2);
-
+                    childPositionList.add(childPos);
                 }
 
             }
