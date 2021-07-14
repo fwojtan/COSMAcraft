@@ -203,7 +203,7 @@ public class RackTileEntity extends ParentTileEntity {
         double serverHeight = yHit-getBlockPos().getY() - serverOffset * Math.tan(Math.acos(yAngle) - Math.PI / 2);
         int serverHitIndex = getServerListIndexFromY(serverHeight);
 
-        if (item.sameItem(Items.STICK.getDefaultInstance())) {
+        if (item.sameItem(Items.STICK.getDefaultInstance()) && serverHitIndex>0) {
             this.serverStates.get(serverHitIndex).ejected = 1;
             System.out.println("Ejecting server");
         }
