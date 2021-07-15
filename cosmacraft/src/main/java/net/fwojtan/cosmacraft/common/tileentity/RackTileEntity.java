@@ -1,5 +1,6 @@
 package net.fwojtan.cosmacraft.common.tileentity;
 
+import net.fwojtan.cosmacraft.common.utils.DoorType;
 import net.fwojtan.cosmacraft.common.utils.ServerState;
 import net.fwojtan.cosmacraft.common.utils.ServerType;
 import net.fwojtan.cosmacraft.init.ModTileEntities;
@@ -29,6 +30,9 @@ public class RackTileEntity extends ParentTileEntity {
     public List<ServerState> serverStates = new ArrayList<>();
     private boolean listInitialized = false;
     private BlockPos controllerPosition;
+    public DoorType doorType;
+    public int doorOpen;
+    public int doorOpenProgress;
 
     public RackTileEntity(TileEntityType<?> type){super(type);}
     public RackTileEntity(){this(ModTileEntities.RACK_TILE_ENTITY.get());}
@@ -149,11 +153,13 @@ public class RackTileEntity extends ParentTileEntity {
         nbtTag.putInt("controllerXPos", this.controllerPosition.getX());
         nbtTag.putInt("controllerYPos", this.controllerPosition.getY());
         nbtTag.putInt("controllerZPos", this.controllerPosition.getZ());
+        nbtTag.putInt("doorInfo", this.doorType.getIndex());
+        nbtTag.putInt("doorOpen", this.doorOpen);
 
 
 
 
-        System.out.println("Sending update tag");
+        //System.out.println("Sending update tag");
 
         return new SUpdateTileEntityPacket(getBlockPos(), -1, nbtTag);
     }
@@ -161,7 +167,7 @@ public class RackTileEntity extends ParentTileEntity {
     @Override
     public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt) {
         CompoundNBT nbtTag = pkt.getTag();
-        System.out.println("Received update tag");
+        //System.out.println("Received update tag");
 
         int[] serverTypeIntArray = nbtTag.getIntArray("serverTypes");
         int [] serverStateIntArray = nbtTag.getIntArray("serverStatesEjected");
@@ -177,6 +183,8 @@ public class RackTileEntity extends ParentTileEntity {
             this.serverStates.add(new ServerState("a", serverStateIntArray[i]));
         }
         this.parentDirection = getDirectionFromString(nbtTag.getString("direction"));
+        this.doorType = DoorType.getTypeFromIndex(nbtTag.getInt("doorInfo"));
+        this.doorOpen = nbtTag.getInt("doorOpen");
 
 
 
@@ -208,11 +216,16 @@ public class RackTileEntity extends ParentTileEntity {
             System.out.println("Ejecting server");
         }
 
+        if (item.sameItem(Items.WOODEN_SWORD.getDefaultInstance())){
+            this.doorOpen = 1;
+        }
+
         if (shiftKeyDown) {
             System.out.println("Triggered server de-eject");
             for (ServerState serverState : serverStates) {
                 serverState.ejected = 0;
             }
+            doorOpen = 0;
 
         }
 

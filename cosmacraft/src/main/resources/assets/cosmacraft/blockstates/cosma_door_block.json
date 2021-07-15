@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "door_type=cosma7": {
+      "model": "cosmacraft:block/cosma7_door"
+    },
+    "door_type=cosma8": {
+      "model": "minecraft:block/air"
+    }
+  }
+}

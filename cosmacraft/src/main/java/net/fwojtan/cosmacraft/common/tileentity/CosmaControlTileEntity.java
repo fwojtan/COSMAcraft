@@ -3,6 +3,7 @@ package net.fwojtan.cosmacraft.common.tileentity;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import net.fwojtan.cosmacraft.CosmaCraft;
+import net.fwojtan.cosmacraft.common.utils.DoorType;
 import net.fwojtan.cosmacraft.common.utils.RackConfig;
 import net.fwojtan.cosmacraft.common.utils.ServerType;
 import net.fwojtan.cosmacraft.init.ModBlocks;
@@ -87,6 +88,7 @@ public class CosmaControlTileEntity extends ParentTileEntity{
                         rackTileEntity.setControllerPosition(getBlockPos());
                         rackTileEntity.serverTypes = this.createServerList(rackConfig.servers);
                         rackTileEntity.parentDirection = childState.getValue(FACING);
+                        rackTileEntity.doorType = DoorType.valueOf(rackConfig.backDoor);
                         rackTileEntity.createFreshStateList();
                         rackTileEntity.setListInitialized(true);
 

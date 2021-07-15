@@ -3,9 +3,7 @@ package net.fwojtan.cosmacraft.client.ter;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
 import net.fwojtan.cosmacraft.common.tileentity.RackTileEntity;
-import net.fwojtan.cosmacraft.common.utils.CableProperties;
-import net.fwojtan.cosmacraft.common.utils.ServerState;
-import net.fwojtan.cosmacraft.common.utils.ServerType;
+import net.fwojtan.cosmacraft.common.utils.*;
 import net.fwojtan.cosmacraft.init.ModBlocks;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.Minecraft;
@@ -22,6 +20,7 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Matrix4f;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.math.vector.Vector3f;
+import net.minecraft.util.math.vector.Vector3i;
 import net.minecraft.world.LightType;
 import net.minecraftforge.client.model.data.EmptyModelData;
 
@@ -29,6 +28,7 @@ import java.util.Random;
 
 
 import static net.fwojtan.cosmacraft.common.block.RackBlock.SHOULD_RENDER;
+import static net.fwojtan.cosmacraft.common.block.DoorBlock.RENDER_CHOICE;
 
 public class RackTileEntityRenderer extends TileEntityRenderer<RackTileEntity> {
 
@@ -49,6 +49,7 @@ public class RackTileEntityRenderer extends TileEntityRenderer<RackTileEntity> {
 
         rotateStack(rackTileEntity.getBlockState().getValue(BlockStateProperties.HORIZONTAL_FACING), matrixStack);
         renderServerFrame(rackTileEntity, matrixStack, vertexBuffer, random, combinedLight, combinedOverlay);
+        renderDoor(rackTileEntity, matrixStack, vertexBuffer, random, combinedLight, combinedOverlay);
 
         if (rackTileEntity.getListInitialized()) {
             renderServers(rackTileEntity, matrixStack, renderBuffers, vertexBuffer, random, combinedLight, combinedOverlay);
@@ -71,6 +72,28 @@ public class RackTileEntityRenderer extends TileEntityRenderer<RackTileEntity> {
         matrixStack.popPose();
 
 
+    }
+
+    private void renderDoor(RackTileEntity rackTileEntity, MatrixStack matrixStack, IVertexBuilder vertexBuffer, Random random, int combinedLight, int combinedOverlay) {
+        if (rackTileEntity.doorType != null) {
+            if (rackTileEntity.doorType.shouldRender) {
+
+                matrixStack.pushPose();
+
+                if (rackTileEntity.doorOpen == 1 || rackTileEntity.doorOpenProgress>0){
+                    rotateStackForDoor(rackTileEntity.doorOpenProgress, matrixStack);
+                }
+
+                mc.getBlockRenderer().getModelRenderer().renderModel(rackTileEntity.getLevel(), rackTileEntity.doorType.getModel(), rackTileEntity.doorType.getState(), rackTileEntity.getBlockPos(), matrixStack, vertexBuffer, true, random, combinedLight, combinedOverlay, EmptyModelData.INSTANCE);
+
+
+                matrixStack.popPose();
+
+                if (rackTileEntity.doorOpen==1 && rackTileEntity.doorOpenProgress<50){rackTileEntity.doorOpenProgress++;}
+                if (rackTileEntity.doorOpen==0 && rackTileEntity.doorOpenProgress>0){rackTileEntity.doorOpenProgress--;}
+
+            }
+        }
     }
 
     private void renderServers(RackTileEntity rackTileEntity, MatrixStack matrixStack, IRenderTypeBuffer renderBuffers, IVertexBuilder vertexBuffer, Random random, int combinedLight, int combinedOverlay){
@@ -125,6 +148,18 @@ public class RackTileEntityRenderer extends TileEntityRenderer<RackTileEntity> {
                 matrixStack.translate(0.0d, 0.0d, -1.0d);
                 break;
         }
+    }
+
+    private void rotateStackForDoor(int progress, MatrixStack matrixStack){
+        double progressFactor = (progress / 50.0d);
+        float doorRotationDegrees = -90.0f* progress / 50.0f;
+        double xTranslation = 1.8d * progressFactor*progressFactor;
+        double yTranslation = -1.8d * progressFactor*progressFactor;
+
+        matrixStack.mulPose(Vector3f.YP.rotationDegrees(doorRotationDegrees));
+
+        matrixStack.translate(xTranslation, 0.0d, yTranslation);
+
     }
 
     private void renderServerFrame(RackTileEntity rackTileEntity, MatrixStack matrixStack, IVertexBuilder vertexBuffer, Random random, int combinedLight, int combinedOverlay) {
