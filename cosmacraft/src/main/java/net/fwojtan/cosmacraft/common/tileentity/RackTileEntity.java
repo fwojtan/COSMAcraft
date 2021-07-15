@@ -4,6 +4,7 @@ import net.fwojtan.cosmacraft.common.utils.DoorType;
 import net.fwojtan.cosmacraft.common.utils.ServerState;
 import net.fwojtan.cosmacraft.common.utils.ServerType;
 import net.fwojtan.cosmacraft.init.ModTileEntities;
+import net.minecraft.block.BlockState;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
@@ -252,5 +253,94 @@ public class RackTileEntity extends ParentTileEntity {
         for (ServerType serverType : serverTypes){
             this.serverStates.add(new ServerState("a", 0));
         }
+    }
+
+    @Override
+    public void load(BlockState state, CompoundNBT nbtTag){
+        super.load(state, nbtTag);
+        int[] serverTypeIntArray = nbtTag.getIntArray("COSMAServerTypes");
+        int [] serverStateIntArray = nbtTag.getIntArray("COSMAServerStatesEjected");
+        this.listInitialized = nbtTag.getBoolean("COSMAListInitialized");
+        this.controllerPosition = new BlockPos(
+                nbtTag.getInt("COSMAControllerXPos"),
+                nbtTag.getInt("COSMAControllerYPos"),
+                nbtTag.getInt("COSMAControllerZPos"));
+        this.serverTypes = new ArrayList<>();
+        this.serverStates = new ArrayList<>();
+        for (int i=0; i<serverTypeIntArray.length; i++){
+            this.serverTypes.add(ServerType.getTypeFromIndex(serverTypeIntArray[i]));
+            this.serverStates.add(new ServerState("a", serverStateIntArray[i]));
+        }
+        this.parentDirection = getDirectionFromString(nbtTag.getString("COSMADirection"));
+        this.doorType = DoorType.getTypeFromIndex(nbtTag.getInt("COSMADoorInfo"));
+        this.doorOpen = nbtTag.getInt("COSMADoorOpen");
+        System.out.println("Loading door type as "+this.doorType.getSerializedName());
+
+    }
+
+    @Override
+    public CompoundNBT save(CompoundNBT nbtTag) {
+        super.save(nbtTag);
+        int[] serverTypeIntArray = new int[this.serverTypes.size()];
+        int[] serverStateIntArray = new int[this.serverTypes.size()];
+        for (int i=0; i<this.serverTypes.size(); i++){
+            serverTypeIntArray[i] = serverTypes.get(i).getIndex();
+            serverStateIntArray[i] = serverStates.get(i).ejected;
+        }
+        nbtTag.putString("COSMADirection", parentDirection.name());
+        nbtTag.putIntArray("COSMAServerTypes",serverTypeIntArray);
+        nbtTag.putIntArray("COSMAServerStatesEjected", serverStateIntArray);
+        nbtTag.putBoolean("COSMAListInitialized", this.listInitialized);
+        nbtTag.putInt("COSMAControllerXPos", this.controllerPosition.getX());
+        nbtTag.putInt("COSMAControllerYPos", this.controllerPosition.getY());
+        nbtTag.putInt("COSMAControllerZPos", this.controllerPosition.getZ());
+        nbtTag.putInt("COSMADoorInfo", this.doorType.getIndex());
+        nbtTag.putInt("COSMADoorOpen", this.doorOpen);
+        System.out.println("Saving door type as "+this.doorType.getSerializedName());
+        return nbtTag;
+    }
+
+    @Override
+    public CompoundNBT getUpdateTag() {
+        CompoundNBT nbtTag = super.getUpdateTag();
+        int[] serverTypeIntArray = new int[this.serverTypes.size()];
+        int[] serverStateIntArray = new int[this.serverTypes.size()];
+        for (int i=0; i<this.serverTypes.size(); i++){
+            serverTypeIntArray[i] = serverTypes.get(i).getIndex();
+            serverStateIntArray[i] = serverStates.get(i).ejected;
+        }
+        nbtTag.putString("COSMADirection", parentDirection.name());
+        nbtTag.putIntArray("COSMAServerTypes",serverTypeIntArray);
+        nbtTag.putIntArray("COSMAServerStatesEjected", serverStateIntArray);
+        nbtTag.putBoolean("COSMAListInitialized", this.listInitialized);
+        nbtTag.putInt("COSMAControllerXPos", this.controllerPosition.getX());
+        nbtTag.putInt("COSMAControllerYPos", this.controllerPosition.getY());
+        nbtTag.putInt("COSMAControllerZPos", this.controllerPosition.getZ());
+        nbtTag.putInt("COSMADoorInfo", this.doorType.getIndex());
+        nbtTag.putInt("COSMADoorOpen", this.doorOpen);
+        System.out.println("Syncing door type as "+this.doorType.getSerializedName());
+        return nbtTag;
+    }
+
+    @Override
+    public void handleUpdateTag(BlockState state, CompoundNBT nbtTag) {
+        super.handleUpdateTag(state, nbtTag);
+        int[] serverTypeIntArray = nbtTag.getIntArray("COSMAServerTypes");
+        int [] serverStateIntArray = nbtTag.getIntArray("COSMAServerStatesEjected");
+        this.listInitialized = nbtTag.getBoolean("COSMAListInitialized");
+        this.controllerPosition = new BlockPos(
+                nbtTag.getInt("COSMAControllerXPos"),
+                nbtTag.getInt("COSMAControllerYPos"),
+                nbtTag.getInt("COSMAControllerZPos"));
+        this.serverTypes = new ArrayList<>();
+        this.serverStates = new ArrayList<>();
+        for (int i=0; i<serverTypeIntArray.length; i++){
+            this.serverTypes.add(ServerType.getTypeFromIndex(serverTypeIntArray[i]));
+            this.serverStates.add(new ServerState("a", serverStateIntArray[i]));
+        }
+        this.parentDirection = getDirectionFromString(nbtTag.getString("COSMADirection"));
+        this.doorType = DoorType.getTypeFromIndex(nbtTag.getInt("COSMADoorInfo"));
+        this.doorOpen = nbtTag.getInt("COSMADoorOpen");
+        System.out.println("Syncing door type as "+this.doorType.getSerializedName());
     }
 }

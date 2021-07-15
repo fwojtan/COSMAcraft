@@ -3,6 +3,7 @@ package net.fwojtan.cosmacraft.common.tileentity;
 import net.fwojtan.cosmacraft.common.utils.ServerType;
 import net.fwojtan.cosmacraft.init.ModBlocks;
 import net.fwojtan.cosmacraft.init.ModTileEntities;
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.nbt.CompoundNBT;
@@ -98,4 +99,37 @@ public class ParentTileEntity extends TileEntity implements ITickableTileEntity 
         return this.childPositionList;
     }
 
+    @Override
+    public CompoundNBT save(CompoundNBT nbtTag) {
+        super.save(nbtTag);
+        nbtTag.putBoolean("childrenPlaced", childrenPlaced);
+        int counter = 0;
+        for (BlockPos pos : childPositionList){
+            nbtTag.putInt("childXPos" + counter, pos.getX());
+            nbtTag.putInt("childYPos" + counter, pos.getY());
+            nbtTag.putInt("childZPos" + counter, pos.getZ());
+            counter++;
+        }
+        nbtTag.putInt("numberOfBlockPos", counter);
+
+
+
+
+        return nbtTag;
+    }
+
+    @Override
+    public void load(BlockState state, CompoundNBT nbtTag) {
+        super.load(state, nbtTag);
+        childrenPlaced = nbtTag.getBoolean("childrenPlaced");
+        int number = nbtTag.getInt("numberOfBlockPos");
+        childPositionList = new ArrayList<>();
+        for (int i=0; i<number; i++){
+            childPositionList.add(new BlockPos(
+                    nbtTag.getInt("childXPos"+i),
+                    nbtTag.getInt("childYPos"+i),
+                    nbtTag.getInt("childZPos"+i)
+            ));
+        }
+    }
 }
