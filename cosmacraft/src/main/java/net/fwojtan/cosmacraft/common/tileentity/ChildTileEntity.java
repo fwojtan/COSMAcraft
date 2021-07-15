@@ -75,4 +75,20 @@ public class ChildTileEntity extends TileEntity {
     }
 
 
+    public CompoundNBT getUpdateTag() {
+        CompoundNBT nbtTag = super.getUpdateTag();
+        nbtTag.putInt("controllerXPos", this.parentPosition.getX());
+        nbtTag.putInt("controllerYPos", this.parentPosition.getY());
+        nbtTag.putInt("controllerZPos", this.parentPosition.getZ());
+        return nbtTag;
+    }
+
+    @Override
+    public void handleUpdateTag(BlockState state, CompoundNBT nbtTag) {
+        super.handleUpdateTag(state, nbtTag);
+        this.parentPosition = new BlockPos(
+                nbtTag.getInt("controllerXPos"),
+                nbtTag.getInt("controllerYPos"),
+                nbtTag.getInt("controllerZPos"));
+    }
 }

@@ -132,4 +132,34 @@ public class ParentTileEntity extends TileEntity implements ITickableTileEntity 
             ));
         }
     }
+
+    @Override
+    public CompoundNBT getUpdateTag() {
+        CompoundNBT nbtTag = super.getUpdateTag();
+        nbtTag.putBoolean("childrenPlaced", childrenPlaced);
+        int counter = 0;
+        for (BlockPos pos : childPositionList){
+            nbtTag.putInt("childXPos" + counter, pos.getX());
+            nbtTag.putInt("childYPos" + counter, pos.getY());
+            nbtTag.putInt("childZPos" + counter, pos.getZ());
+            counter++;
+        }
+        nbtTag.putInt("numberOfBlockPos", counter);
+        return nbtTag;
+    }
+
+    @Override
+    public void handleUpdateTag(BlockState state, CompoundNBT nbtTag) {
+        super.handleUpdateTag(state, nbtTag);
+        childrenPlaced = nbtTag.getBoolean("childrenPlaced");
+        int number = nbtTag.getInt("numberOfBlockPos");
+        childPositionList = new ArrayList<>();
+        for (int i=0; i<number; i++){
+            childPositionList.add(new BlockPos(
+                    nbtTag.getInt("childXPos"+i),
+                    nbtTag.getInt("childYPos"+i),
+                    nbtTag.getInt("childZPos"+i)
+            ));
+        }
+    }
 }
