@@ -65,7 +65,7 @@ public class ServerState {
 
             } else {
                 message += serverName.get(0)+"\n";
-                message += type.getSerializedName();
+                message += type.getSerializedName()+"\n";
                 // come back and add descriptions for each of these rather than the gibberish names
             }
 

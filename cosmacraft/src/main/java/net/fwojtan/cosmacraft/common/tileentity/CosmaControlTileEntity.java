@@ -128,7 +128,10 @@ public class CosmaControlTileEntity extends ParentTileEntity{
                 reader.close();
 
                 for (RackConfig rackConfig : rackConfigList) {
+                    Vector3i offset = new Vector3i(2, 1, 3);
+
                     BlockPos childPos = getChildPosition(new Vector3i(rackConfig.x, rackConfig.y, rackConfig.z));
+                    childPos = childPos.offset(offset);
                     BlockState childState = ModBlocks.RACK_BLOCK.get().defaultBlockState().setValue(FACING, Direction.valueOf(rackConfig.facing))
                             .setValue(SHOULD_RENDER, false);
 
