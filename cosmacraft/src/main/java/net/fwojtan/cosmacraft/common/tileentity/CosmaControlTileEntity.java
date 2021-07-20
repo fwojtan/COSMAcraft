@@ -276,6 +276,7 @@ public class CosmaControlTileEntity extends ParentTileEntity{
             stateData.id = nbtTag.getString("id"+i);
             stateData.cpu = nbtTag.getFloat("dataCpu"+i);
             stateData.mem = nbtTag.getFloat("dataMem"+i);
+            stateData.state = nbtTag.getString("dataState"+i);
             stateData.job = nbtTag.getString("dataJob"+i);
             stateData.runtime = nbtTag.getString("dataRuntime"+i);
             stateData.updated = nbtTag.getString("dataUpdated"+i);
@@ -338,6 +339,7 @@ public class CosmaControlTileEntity extends ParentTileEntity{
             stateData.id = nbtTag.getString("id"+i);
             stateData.cpu = nbtTag.getFloat("dataCpu"+i);
             stateData.mem = nbtTag.getFloat("dataMem"+i);
+            stateData.state = nbtTag.getString("dataState"+i);
             stateData.job = nbtTag.getString("dataJob"+i);
             stateData.runtime = nbtTag.getString("dataRuntime"+i);
             stateData.updated = nbtTag.getString("dataUpdated"+i);
