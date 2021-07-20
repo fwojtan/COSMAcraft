@@ -104,14 +104,15 @@ public class ParentTileEntity extends TileEntity implements ITickableTileEntity 
         super.save(nbtTag);
         nbtTag.putBoolean("childrenPlaced", childrenPlaced);
         int counter = 0;
-        for (BlockPos pos : childPositionList){
-            nbtTag.putInt("childXPos" + counter, pos.getX());
-            nbtTag.putInt("childYPos" + counter, pos.getY());
-            nbtTag.putInt("childZPos" + counter, pos.getZ());
-            counter++;
+        if (childPositionList != null) {
+            for (BlockPos pos : childPositionList) {
+                nbtTag.putInt("childXPos" + counter, pos.getX());
+                nbtTag.putInt("childYPos" + counter, pos.getY());
+                nbtTag.putInt("childZPos" + counter, pos.getZ());
+                counter++;
+            }
+            nbtTag.putInt("numberOfBlockPos", counter);
         }
-        nbtTag.putInt("numberOfBlockPos", counter);
-
 
 
 

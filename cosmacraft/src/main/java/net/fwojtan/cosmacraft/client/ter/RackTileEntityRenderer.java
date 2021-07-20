@@ -97,36 +97,38 @@ public class RackTileEntityRenderer extends TileEntityRenderer<RackTileEntity> {
     }
 
     private void renderServers(RackTileEntity rackTileEntity, MatrixStack matrixStack, IRenderTypeBuffer renderBuffers, IVertexBuilder vertexBuffer, Random random, int combinedLight, int combinedOverlay){
-        for (int i = 0; i<rackTileEntity.serverTypes.size(); i++){
-            ServerType serverType = rackTileEntity.serverTypes.get(i);
-            ServerState serverState = rackTileEntity.serverStates.get(i);
-            if (serverType.shouldRender) {
+        if (rackTileEntity.serverStates.size() == rackTileEntity.serverTypes.size()) {
+            for (int i = 0; i < rackTileEntity.serverTypes.size(); i++) {
+                ServerType serverType = rackTileEntity.serverTypes.get(i);
+                ServerState serverState = rackTileEntity.serverStates.get(i);
+                if (serverType.shouldRender) {
 
-                Vector3d ejectAmount = new Vector3d(0.0d, 0.0d, 0.0d);
+                    Vector3d ejectAmount = new Vector3d(0.0d, 0.0d, 0.0d);
 
-                if (serverState.ejected == 1 || serverState.ejectProgress>0) {
-                    ejectAmount = new Vector3d(0.0d, 0.0d, -0.4 * (1-Math.cos(Math.PI*serverState.ejectProgress/50.0d)));
-                    matrixStack.translate(ejectAmount.x, ejectAmount.y, ejectAmount.z);
+                    if (serverState.ejected == 1 || serverState.ejectProgress > 0) {
+                        ejectAmount = new Vector3d(0.0d, 0.0d, -0.4 * (1 - Math.cos(Math.PI * serverState.ejectProgress / 50.0d)));
+                        matrixStack.translate(ejectAmount.x, ejectAmount.y, ejectAmount.z);
+                    }
+
+                    mc.getBlockRenderer().getModelRenderer().renderModel(rackTileEntity.getLevel(), serverType.getModel(), serverType.getState(), rackTileEntity.getBlockPos(), matrixStack, vertexBuffer, true, random, combinedLight, combinedOverlay, EmptyModelData.INSTANCE);
+
+                    // move the matrix stack back so the rest of the servers can be rendered in the correct place
+                    if (serverState.ejected == 1 || serverState.ejectProgress > 0) {
+                        matrixStack.translate(0.0d, 0.0d, -1.0d * ejectAmount.z);
+                    }
+
+                    if (serverState.ejectProgress < 50 && serverState.ejected == 1) serverState.ejectProgress++;
+                    if (serverState.ejected == 0 && serverState.ejectProgress > 0) serverState.ejectProgress--;
+
+                    for (CableProperties cableProperties : serverType.frontCableList) {
+                        renderCable(cableProperties.startPoint.add(ejectAmount), cableProperties.endPoint, matrixStack, renderBuffers, rackTileEntity, cableProperties.color);
+                    }
+
+                    vertexBuffer = renderBuffers.getBuffer(RenderType.cutoutMipped());
+
                 }
-
-                mc.getBlockRenderer().getModelRenderer().renderModel(rackTileEntity.getLevel(), serverType.getModel(), serverType.getState(), rackTileEntity.getBlockPos(), matrixStack, vertexBuffer, true, random, combinedLight, combinedOverlay, EmptyModelData.INSTANCE);
-
-                // move the matrix stack back so the rest of the servers can be rendered in the correct place
-                if (serverState.ejected == 1 || serverState.ejectProgress>0) {
-                    matrixStack.translate(0.0d, 0.0d, -1.0d*ejectAmount.z);
-                }
-
-                if (serverState.ejectProgress<50 && serverState.ejected==1) serverState.ejectProgress++;
-                if (serverState.ejected == 0 && serverState.ejectProgress>0) serverState.ejectProgress--;
-
-                for (CableProperties cableProperties : serverType.frontCableList){
-                    renderCable(cableProperties.startPoint.add(ejectAmount), cableProperties.endPoint, matrixStack, renderBuffers, rackTileEntity, cableProperties.color);
-                }
-
-                vertexBuffer = renderBuffers.getBuffer(RenderType.cutoutMipped());
-
+                matrixStack.translate(0.0d, 0.057865d * serverType.getUHeight(), 0.0d);
             }
-            matrixStack.translate(0.0d, 0.057865d*serverType.getUHeight(), 0.0d);
         }
     }
 

@@ -3,15 +3,14 @@ package net.fwojtan.cosmacraft.common.tileentity;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import net.fwojtan.cosmacraft.CosmaCraft;
-import net.fwojtan.cosmacraft.common.utils.DoorType;
-import net.fwojtan.cosmacraft.common.utils.RackConfig;
-import net.fwojtan.cosmacraft.common.utils.ServerType;
+import net.fwojtan.cosmacraft.common.utils.*;
 import net.fwojtan.cosmacraft.init.ModBlocks;
 import net.fwojtan.cosmacraft.init.ModTileEntities;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.resources.ResourcePackType;
 import net.minecraft.resources.SimpleReloadableResourceManager;
+import net.minecraft.stats.Stat;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
@@ -25,8 +24,12 @@ import java.lang.reflect.Type;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.Duration;
+import java.time.Instant;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static net.fwojtan.cosmacraft.common.block.ParentBlock.FACING;
 import static net.fwojtan.cosmacraft.common.block.RackBlock.SHOULD_RENDER;
@@ -36,16 +39,67 @@ public class CosmaControlTileEntity extends ParentTileEntity{
     public CosmaControlTileEntity(TileEntityType<?> type){super(type);}
     public CosmaControlTileEntity(){this(ModTileEntities.COSMA_CONTROL_TILE_ENTITY.get());}
 
+    private boolean waiting = false;
+    private Instant startTime = Instant.now();
+    public Map<String, StateData> latestStateData = getLatestStateData();
+
     @Override
     public void tick() {
+
+
+        Instant timeNow = Instant.now();
+        long timeElapsed = Duration.between(startTime, timeNow).toMinutes();
+        if (timeElapsed > 1) {waiting = false;}
+
+
+        if (!waiting) {
+            startTime = Instant.now();
+            waiting = true;
+
+            // Do stuff here
+            getLatestStateData();
+
+
+
+        }
+
         if(!childrenPlaced){
 
-                placeChildren();
+            placeChildren();
 
             childrenPlaced=true;
         }
 
+
     }
+
+    public Map<String, StateData> getLatestStateData(){
+
+        Map<String, StateData> stateDataMap = null;
+        Type stateDataType = new TypeToken<HashMap<String, StateData>>(){}.getType();
+        Path configLocation = FMLPaths.getOrCreateGameRelativePath(Paths.get("util/cosma_config/"), "cosma_config_path");
+
+        try {
+            File file = new File(configLocation.toString() + "/cosma_usage_latest.json");
+
+            // read json
+            Reader reader = Files.newBufferedReader(Paths.get(file.getPath()));
+            stateDataMap = new Gson().fromJson(reader, stateDataType);
+            reader.close();
+
+            StateData testData = stateDataMap.get("m7031");
+            System.out.println(testData.id);
+
+        } catch (IOException e){
+            e.printStackTrace();
+        }
+
+
+
+        return stateDataMap;
+    }
+
+
 
     @Override
     public void placeChildren() {
@@ -89,7 +143,25 @@ public class CosmaControlTileEntity extends ParentTileEntity{
                         rackTileEntity.serverTypes = this.createServerList(rackConfig.servers);
                         rackTileEntity.parentDirection = childState.getValue(FACING);
                         rackTileEntity.doorType = DoorType.valueOf(rackConfig.backDoor);
-                        rackTileEntity.createFreshStateList();
+                        int j=0;
+                        for (int i=0; i<rackConfig.servers.size(); i++){
+                            String name = rackConfig.names.get(j);
+                            if (rackConfig.servers.get(i).contains("GAP")){
+                                rackTileEntity.serverStates.add(new ServerState("Empty space", 0, false));
+                            } else {
+                                if (this.latestStateData.containsKey(name) || name.contains("m7")) {
+                                    rackTileEntity.serverStates.add(new ServerState(name, 0, true));
+                                } else {
+                                    rackTileEntity.serverStates.add(new ServerState(name, 0, false));
+                                }
+                                j++;
+                            }
+                        }
+                        rackTileEntity.updateStateList();
+                        System.out.println("Placed Rack and Initialized for Rack "+rackConfig.id);
+                        System.out.println("StateList size:" + rackTileEntity.serverStates.size());
+                        System.out.println("TypeList size:" + rackTileEntity.serverTypes.size());
+                        //rackTileEntity.createFreshStateList();
                         rackTileEntity.setListInitialized(true);
 
                     }
@@ -121,8 +193,6 @@ public class CosmaControlTileEntity extends ParentTileEntity{
 
     @Override
     public List<BlockPos> createChildPositonList() {
-
-
 
         return super.createChildPositonList();
     }
@@ -665,7 +735,6 @@ public class CosmaControlTileEntity extends ParentTileEntity{
                 "\t\t\t\"ONE_U_HORIZONTAL_DRIVES\",\n" +
                 "\t\t\t\"ONE_U_HORIZONTAL_DRIVES\",\n" +
                 "\t\t\t\"ONE_U_HORIZONTAL_DRIVES\",\n" +
-                "\t\t\t\"ONE_U_HORIZONTAL_DRIVES\",\n" +
                 "\t\t\t\"MD_3420\",\n" +
                 "\t\t\t\"MD_3420\",\n" +
                 "\t\t\t\"MD_3420\",\n" +
@@ -717,7 +786,6 @@ public class CosmaControlTileEntity extends ParentTileEntity{
                 "\t\t\t\"MD_3420\",\n" +
                 "\t\t\t\"MD_3420\",\n" +
                 "\t\t\t\"MD_3420\",\n" +
-                "\t\t\t\"ONE_U_HORIZONTAL_DRIVES\",\n" +
                 "\t\t\t\"ONE_U_HORIZONTAL_DRIVES\",\n" +
                 "\t\t\t\"ONE_U_HORIZONTAL_DRIVES\",\n" +
                 "\t\t\t\"ONE_U_HORIZONTAL_DRIVES\",\n" +
