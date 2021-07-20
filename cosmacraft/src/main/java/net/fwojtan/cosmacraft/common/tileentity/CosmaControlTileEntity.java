@@ -41,7 +41,7 @@ public class CosmaControlTileEntity extends ParentTileEntity{
 
     private boolean waiting = false;
     private Instant startTime = Instant.now();
-    public Map<String, StateData> latestStateData = getLatestStateData();
+    public Map<String, StateData> latestStateData;
 
     @Override
     public void tick() {
@@ -58,7 +58,7 @@ public class CosmaControlTileEntity extends ParentTileEntity{
 
             // Do stuff here
             getLatestStateData();
-
+            System.out.println("");
 
 
         }
@@ -73,30 +73,28 @@ public class CosmaControlTileEntity extends ParentTileEntity{
 
     }
 
-    public Map<String, StateData> getLatestStateData(){
+    public void getLatestStateData(){
+        if (!getLevel().isClientSide()){
+            Map<String, StateData> stateDataMap = null;
+            Type stateDataType = new TypeToken<HashMap<String, StateData>>(){}.getType();
+            Path configLocation = FMLPaths.getOrCreateGameRelativePath(Paths.get("util/cosma_config/"), "cosma_config_path");
 
-        Map<String, StateData> stateDataMap = null;
-        Type stateDataType = new TypeToken<HashMap<String, StateData>>(){}.getType();
-        Path configLocation = FMLPaths.getOrCreateGameRelativePath(Paths.get("util/cosma_config/"), "cosma_config_path");
+            try {
+                File file = new File(configLocation.toString() + "/cosma_usage_latest.json");
 
-        try {
-            File file = new File(configLocation.toString() + "/cosma_usage_latest.json");
+                // read json
+                Reader reader = Files.newBufferedReader(Paths.get(file.getPath()));
+                stateDataMap = new Gson().fromJson(reader, stateDataType);
+                reader.close();
 
-            // read json
-            Reader reader = Files.newBufferedReader(Paths.get(file.getPath()));
-            stateDataMap = new Gson().fromJson(reader, stateDataType);
-            reader.close();
+                StateData testData = stateDataMap.get("m7031");
+                System.out.println(testData.id);
 
-            StateData testData = stateDataMap.get("m7031");
-            System.out.println(testData.id);
-
-        } catch (IOException e){
-            e.printStackTrace();
+            } catch (IOException e){
+                e.printStackTrace();
+            }
+            latestStateData =  stateDataMap;
         }
-
-
-
-        return stateDataMap;
     }
 
 
