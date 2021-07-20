@@ -45,12 +45,12 @@ public class RackTileEntity extends ParentTileEntity {
     public void tick() {
         super.tick();
 
-        if (loopCounter == 0){
+        if (loopCounter == 40){
             updateStateList();
         }
 
-        if (loopCounter > 1200){
-            loopCounter = 1;
+        if (loopCounter > 1241){
+            loopCounter = 41;
             // update with latest state data here?
             updateStateList();
         }
@@ -60,23 +60,26 @@ public class RackTileEntity extends ParentTileEntity {
 
     public void updateStateList(){
         CosmaControlTileEntity controller = (CosmaControlTileEntity) this.level.getBlockEntity(this.controllerPosition);
-        for (ServerState serverState : serverStates){
+        if (controller.latestStateData != null) {
+            getLevel().sendBlockUpdated(controllerPosition, getLevel().getBlockState(controllerPosition), getLevel().getBlockState(controllerPosition), 2);
+            for (ServerState serverState : serverStates) {
 
-            if (serverState.isComputeNode){
-                for (int i=0; i<serverState.serverName.size(); i++){
-                    String name = serverState.serverName.get(i);
-                    serverState.updateTime.add(i, controller.latestStateData.get(name).updated);
-                    serverState.jobName.add(i, controller.latestStateData.get(name).job);
-                    serverState.jobDuration.add(i, controller.latestStateData.get(name).runtime);
-                    serverState.status.add(i, controller.latestStateData.get(name).state);
-                    serverState.cpuUsage.add(i, String.valueOf(controller.latestStateData.get(name).cpu));
-                    serverState.memUsage.add(i, String.valueOf(controller.latestStateData.get(name).mem));
+                if (serverState.isComputeNode) {
+                    for (int i = 0; i < serverState.serverName.size(); i++) {
+                        String name = serverState.serverName.get(i);
+                        serverState.updateTime.add(i, controller.latestStateData.get(name).updated);
+                        serverState.jobName.add(i, controller.latestStateData.get(name).job);
+                        serverState.jobDuration.add(i, controller.latestStateData.get(name).runtime);
+                        serverState.status.add(i, controller.latestStateData.get(name).state);
+                        serverState.cpuUsage.add(i, String.valueOf(controller.latestStateData.get(name).cpu));
+                        serverState.memUsage.add(i, String.valueOf(controller.latestStateData.get(name).mem));
+                    }
+
                 }
 
             }
-
-        }
-        System.out.println("Attempted to update state list");
+            System.out.println("Attempted to update state list");
+        } else {System.out.println("Skipped statelist update due to null data");}
     }
 
     private void createServerList(){
@@ -227,7 +230,8 @@ public class RackTileEntity extends ParentTileEntity {
             this.serverStates.add(state);
 
         }
-        updateStateList();
+        CosmaControlTileEntity controller = (CosmaControlTileEntity) getLevel().getBlockEntity(controllerPosition);
+        if (controller.latestStateData != null){ updateStateList();}
         this.parentDirection = getDirectionFromString(nbtTag.getString("direction"));
         this.doorType = DoorType.getTypeFromIndex(nbtTag.getInt("doorInfo"));
         this.doorOpen = nbtTag.getInt("doorOpen");

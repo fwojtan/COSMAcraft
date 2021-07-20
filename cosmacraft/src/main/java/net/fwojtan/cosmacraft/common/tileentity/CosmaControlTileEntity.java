@@ -8,6 +8,9 @@ import net.fwojtan.cosmacraft.init.ModBlocks;
 import net.fwojtan.cosmacraft.init.ModTileEntities;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.Minecraft;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.network.NetworkManager;
+import net.minecraft.network.play.server.SUpdateTileEntityPacket;
 import net.minecraft.resources.ResourcePackType;
 import net.minecraft.resources.SimpleReloadableResourceManager;
 import net.minecraft.stats.Stat;
@@ -19,6 +22,7 @@ import net.minecraft.util.math.vector.Vector3i;
 import net.minecraftforge.fml.loading.FMLConfig;
 import net.minecraftforge.fml.loading.FMLPaths;
 
+import javax.annotation.Nullable;
 import java.io.*;
 import java.lang.reflect.Type;
 import java.nio.file.Files;
@@ -42,9 +46,12 @@ public class CosmaControlTileEntity extends ParentTileEntity{
     private boolean waiting = false;
     private Instant startTime = Instant.now();
     public Map<String, StateData> latestStateData;
+    private int loopCounter = 0;
 
     @Override
     public void tick() {
+
+
 
 
         Instant timeNow = Instant.now();
@@ -58,7 +65,7 @@ public class CosmaControlTileEntity extends ParentTileEntity{
 
             // Do stuff here
             getLatestStateData();
-            System.out.println("");
+
 
 
         }
@@ -68,7 +75,18 @@ public class CosmaControlTileEntity extends ParentTileEntity{
             placeChildren();
 
             childrenPlaced=true;
+
+            getLevel().sendBlockUpdated(getBlockPos(), getLevel().getBlockState(getBlockPos()), getLevel().getBlockState(getBlockPos()), 2);
         }
+
+        if (loopCounter == 40){
+            getLevel().sendBlockUpdated(getBlockPos(), getLevel().getBlockState(getBlockPos()), getLevel().getBlockState(getBlockPos()), 2);
+            loopCounter++;
+        } else if (loopCounter < 41){
+            loopCounter++;
+        }
+
+
 
 
     }
@@ -94,6 +112,8 @@ public class CosmaControlTileEntity extends ParentTileEntity{
                 e.printStackTrace();
             }
             latestStateData =  stateDataMap;
+
+            System.out.println("Updated state data to latest version for controller on server thread");
         }
     }
 
@@ -108,33 +128,34 @@ public class CosmaControlTileEntity extends ParentTileEntity{
         List<RackConfig> rackConfigList;
         Type rackConfigType = new TypeToken<ArrayList<RackConfig>>(){}.getType();
         Path configLocation = FMLPaths.getOrCreateGameRelativePath(Paths.get("util/cosma_config/"), "cosma_config_path");
+        if (!this.level.isClientSide()) {
+            try {
+                File file = new File(configLocation.toString() + "/cosma_config.json");
 
-        try {
-            File file = new File(configLocation.toString() + "/cosma_config.json");
+                // generate json in the right location if it doesn't exist
+                if (file.createNewFile()) {
+                    System.out.println("Created: " + file.getName() + " at " + file.getPath());
+                    FileWriter writer = new FileWriter(file.getPath());
+                    writer.write(createDefaultConfigJson());
+                    writer.close();
+                } else {
+                    System.out.println("File already exists");
 
-            // generate json in the right location if it doesn't exist
-            if (file.createNewFile()) {
-                System.out.println("Created: "+file.getName()+" at "+file.getPath());
-                FileWriter writer = new FileWriter(file.getPath());
-                writer.write(createDefaultConfigJson());
-                writer.close();
-            } else {System.out.println("File already exists");
+                    // read json
+                    Reader reader = Files.newBufferedReader(Paths.get(file.getPath()));
+                    rackConfigList = new Gson().fromJson(reader, rackConfigType);
+                    reader.close();
 
-                // read json
-                Reader reader = Files.newBufferedReader(Paths.get(file.getPath()));
-                rackConfigList = new Gson().fromJson(reader, rackConfigType);
-                reader.close();
+                    for (RackConfig rackConfig : rackConfigList) {
+                        Vector3i offset = new Vector3i(2, 1, 3);
 
-                for (RackConfig rackConfig : rackConfigList) {
-                    Vector3i offset = new Vector3i(2, 1, 3);
+                        BlockPos childPos = getChildPosition(new Vector3i(rackConfig.x, rackConfig.y, rackConfig.z));
+                        childPos = childPos.offset(offset);
+                        BlockState childState = ModBlocks.RACK_BLOCK.get().defaultBlockState().setValue(FACING, Direction.valueOf(rackConfig.facing))
+                                .setValue(SHOULD_RENDER, false);
 
-                    BlockPos childPos = getChildPosition(new Vector3i(rackConfig.x, rackConfig.y, rackConfig.z));
-                    childPos = childPos.offset(offset);
-                    BlockState childState = ModBlocks.RACK_BLOCK.get().defaultBlockState().setValue(FACING, Direction.valueOf(rackConfig.facing))
-                            .setValue(SHOULD_RENDER, false);
+                        // we only create these things on the server side
 
-                    // we only create these things on the server side
-                    if (!this.level.isClientSide()) {
                         // place racks in required positions
                         getLevel().setBlock(childPos, childState, 3);
 
@@ -144,10 +165,10 @@ public class CosmaControlTileEntity extends ParentTileEntity{
                         rackTileEntity.serverTypes = this.createServerList(rackConfig.servers);
                         rackTileEntity.parentDirection = childState.getValue(FACING);
                         rackTileEntity.doorType = DoorType.valueOf(rackConfig.backDoor);
-                        int j=0;
-                        for (int i=0; i<rackConfig.servers.size(); i++){
+                        int j = 0;
+                        for (int i = 0; i < rackConfig.servers.size(); i++) {
                             String name = rackConfig.names.get(j);
-                            if (rackConfig.servers.get(i).contains("GAP")){
+                            if (rackConfig.servers.get(i).contains("GAP")) {
                                 rackTileEntity.serverStates.add(new ServerState("Empty space", 0, false));
                             } else {
                                 if (this.latestStateData.containsKey(name) || name.contains("m7")) {
@@ -159,28 +180,75 @@ public class CosmaControlTileEntity extends ParentTileEntity{
                             }
                         }
                         rackTileEntity.updateStateList();
-                        System.out.println("Placed Rack and Initialized for Rack "+rackConfig.id);
+                        System.out.println("Placed Rack and Initialized for Rack " + rackConfig.id);
                         System.out.println("StateList size:" + rackTileEntity.serverStates.size());
                         System.out.println("TypeList size:" + rackTileEntity.serverTypes.size());
                         //rackTileEntity.createFreshStateList();
                         rackTileEntity.setListInitialized(true);
 
+
+                        // and then after they're created we mark them for an update on the render thread
+                        getLevel().sendBlockUpdated(childPos, childState, childState, 2);
+                        childPositionList.add(childPos);
                     }
 
-                    // and then after they're created we mark them for an update on the render thread
-                    getLevel().sendBlockUpdated(childPos, childState, childState, 2);
-                    childPositionList.add(childPos);
-                }
 
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
             }
-        } catch (IOException e){
-            e.printStackTrace();
         }
 
     }
 
+    @Nullable
+    @Override
+    public SUpdateTileEntityPacket getUpdatePacket() {
+        CompoundNBT nbtTag = new CompoundNBT();
+        if (latestStateData != null) {
+            int i = 0;
+            for (String key : latestStateData.keySet()) {
+                StateData data = latestStateData.get(key);
 
+                nbtTag.putFloat("dataCpu" + i, data.cpu);
+                nbtTag.putFloat("dataMem" + i, data.mem);
+                nbtTag.putString("id" + i, data.id);
+                nbtTag.putString("dataJob" + i, data.job);
+                nbtTag.putString("dataState" + i, data.state);
+                nbtTag.putString("dataRuntime" + i, data.runtime);
+                nbtTag.putString("dataUpdated" + i, data.updated);
 
+                i++;
+            }
+            nbtTag.putInt("numberOfEntries", i);
+        }
+        return new SUpdateTileEntityPacket(getBlockPos(), -1, nbtTag);
+
+    }
+
+    @Override
+    public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt) {
+        CompoundNBT nbtTag = pkt.getTag();
+
+        latestStateData = new HashMap<>();
+
+        int number = nbtTag.getInt("numberOfEntries");
+        for (int i=0; i<number+1; i++){
+            StateData state = new StateData();
+            state.id = nbtTag.getString("id"+i);
+            state.cpu = nbtTag.getFloat("dataCpu"+i);
+            state.mem = nbtTag.getFloat("dataMem"+i);
+            state.state = nbtTag.getString("dataState"+i);
+            state.job = nbtTag.getString("dataJob"+i);
+            state.runtime = nbtTag.getString("dataRuntime"+i);
+            state.updated = nbtTag.getString("dataUpdated"+i);
+
+            latestStateData.put(state.id, state);
+        }
+
+        System.out.println("Completed packet update");
+
+    }
 
 
     private List<ServerType> createServerList(List<String> servers){
@@ -197,6 +265,87 @@ public class CosmaControlTileEntity extends ParentTileEntity{
 
         return super.createChildPositonList();
     }
+    @Override
+    public void load(BlockState state, CompoundNBT nbtTag){
+        super.load(state, nbtTag);
+        latestStateData = new HashMap<>();
+
+        int number = nbtTag.getInt("numberOfEntries");
+        for (int i=0; i<number+1; i++){
+            StateData stateData = new StateData();
+            stateData.id = nbtTag.getString("id"+i);
+            stateData.cpu = nbtTag.getFloat("dataCpu"+i);
+            stateData.mem = nbtTag.getFloat("dataMem"+i);
+            stateData.job = nbtTag.getString("dataJob"+i);
+            stateData.runtime = nbtTag.getString("dataRuntime"+i);
+            stateData.updated = nbtTag.getString("dataUpdated"+i);
+
+            latestStateData.put(stateData.id, stateData);
+        }
+
+    }
+
+    @Override
+    public CompoundNBT save(CompoundNBT nbtTag) {
+        super.save(nbtTag);
+        int i=0;
+        for (String key : latestStateData.keySet()){
+            StateData data = latestStateData.get(key);
+
+            nbtTag.putFloat("dataCpu"+i, data.cpu);
+            nbtTag.putFloat("dataMem"+i, data.mem);
+            nbtTag.putString("id"+i, data.id);
+            nbtTag.putString("dataJob"+i, data.job);
+            nbtTag.putString("dataState"+i, data.state);
+            nbtTag.putString("dataRuntime"+i, data.runtime);
+            nbtTag.putString("dataUpdated"+i, data.updated);
+
+            i++;
+        }
+        nbtTag.putInt("numberOfEntries", i);
+        return nbtTag;
+    }
+
+    @Override
+    public CompoundNBT getUpdateTag() {
+        CompoundNBT nbtTag = super.getUpdateTag();
+        int i=0;
+        for (String key : latestStateData.keySet()){
+            StateData data = latestStateData.get(key);
+
+            nbtTag.putFloat("dataCpu"+i, data.cpu);
+            nbtTag.putFloat("dataMem"+i, data.mem);
+            nbtTag.putString("id"+i, data.id);
+            nbtTag.putString("dataJob"+i, data.job);
+            nbtTag.putString("dataState"+i, data.state);
+            nbtTag.putString("dataRuntime"+i, data.runtime);
+            nbtTag.putString("dataUpdated"+i, data.updated);
+
+            i++;
+        }
+        nbtTag.putInt("numberOfEntries", i);
+        return nbtTag;
+    }
+
+    @Override
+    public void handleUpdateTag(BlockState state, CompoundNBT nbtTag) {
+        super.handleUpdateTag(state, nbtTag);
+        latestStateData = new HashMap<>();
+
+        int number = nbtTag.getInt("numberOfEntries");
+        for (int i=0; i<number+1; i++){
+            StateData stateData = new StateData();
+            stateData.id = nbtTag.getString("id"+i);
+            stateData.cpu = nbtTag.getFloat("dataCpu"+i);
+            stateData.mem = nbtTag.getFloat("dataMem"+i);
+            stateData.job = nbtTag.getString("dataJob"+i);
+            stateData.runtime = nbtTag.getString("dataRuntime"+i);
+            stateData.updated = nbtTag.getString("dataUpdated"+i);
+
+            latestStateData.put(stateData.id, stateData);
+        }
+    }
+
 
 
     // there is presumably a better way than hardcoding this config file but I can't figure out how to load a file from a resource location for the life of me
