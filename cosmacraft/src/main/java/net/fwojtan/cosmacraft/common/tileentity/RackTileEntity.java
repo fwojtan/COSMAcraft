@@ -45,9 +45,14 @@ public class RackTileEntity extends ParentTileEntity {
     public void tick() {
         super.tick();
 
+        if (loopCounter == 0){
+            updateStateList();
+        }
+
         if (loopCounter > 1200){
-            loopCounter = 0;
+            loopCounter = 1;
             // update with latest state data here?
+            updateStateList();
         }
         loopCounter++;
 
@@ -317,14 +322,14 @@ public class RackTileEntity extends ParentTileEntity {
         this.serverStates = new ArrayList<>();
         for (int i=0; i<serverTypeIntArray.length; i++){
             this.serverTypes.add(ServerType.getTypeFromIndex(serverTypeIntArray[i]));
-            this.serverStates.get(i).ejected = serverStateIntArray[i];
+            //this.serverStates.get(i).ejected = serverStateIntArray[i];
 
             ServerState serverState = new ServerState(nbtTag.getString("stateServerName"+i), serverStateIntArray[i],
                     nbtTag.getBoolean("stateIsComputeNode"+i));
 
             this.serverStates.add(serverState);
         }
-        updateStateList();
+        //updateStateList();
         this.parentDirection = getDirectionFromString(nbtTag.getString("COSMADirection"));
         this.doorType = DoorType.getTypeFromIndex(nbtTag.getInt("COSMADoorInfo"));
         this.doorOpen = nbtTag.getInt("COSMADoorOpen");
@@ -397,7 +402,7 @@ public class RackTileEntity extends ParentTileEntity {
         this.serverStates = new ArrayList<>();
         for (int i=0; i<serverTypeIntArray.length; i++){
             this.serverTypes.add(ServerType.getTypeFromIndex(serverTypeIntArray[i]));
-            this.serverStates.get(i).ejected = serverStateIntArray[i];
+            //this.serverStates.get(i).ejected = serverStateIntArray[i];
 
             ServerState serverState = new ServerState(nbtTag.getString("stateServerName"+i), serverStateIntArray[i],
                     nbtTag.getBoolean("stateIsComputeNode"+i));
