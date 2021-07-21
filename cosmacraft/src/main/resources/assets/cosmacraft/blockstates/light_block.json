@@ -1,0 +1,16 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "cosmacraft:block/light_block"
+    },
+    "facing=south": {
+      "model": "cosmacraft:block/light_block"
+    },
+    "facing=east": {
+      "model": "cosmacraft:block/light_block"
+    },
+    "facing=west": {
+      "model": "cosmacraft:block/light_block"
+    }
+  }
+}

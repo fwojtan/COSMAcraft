@@ -280,7 +280,9 @@ public class RackTileEntity extends ParentTileEntity {
         }
         else {
             if (level.isClientSide()) {
-                this.serverStates.get(serverHitIndex).printStateToPlayer(player, this.serverTypes.get(serverHitIndex));
+                if (serverHitIndex >= 0) {
+                    this.serverStates.get(serverHitIndex).printStateToPlayer(player, this.serverTypes.get(serverHitIndex));
+                }
             }
         }
 

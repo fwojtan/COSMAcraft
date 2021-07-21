@@ -20,6 +20,7 @@ public class ModBlocks {
     public static final RegistryObject<Block> COSMA_CONTROL_BLOCK = register("cosma_control_block", () -> new CosmaControlBlock());
     public static final RegistryObject<Block> SERVER_MODEL_BLOCK = registerNoItem("server_model_block", () -> new ServerBlock());
     public static final RegistryObject<Block> COSMA_DOOR_BLOCK = registerNoItem("cosma_door_block", () -> new DoorBlock());
+    public static final RegistryObject<Block> LIGHT_BLOCK = register("light_block", () -> new LightBlock());
 
 
     static void register() {}
