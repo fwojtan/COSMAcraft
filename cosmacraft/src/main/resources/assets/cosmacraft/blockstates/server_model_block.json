@@ -25,64 +25,67 @@
       "model": "cosmacraft:block/mellanox_switch"
     },
     "server_type=mad_03_server": {
-      "model": "cosmacraft:block/r740_hex_flat"
+      "model": "cosmacraft:block/r740_hex"
     },
     "server_type=ethernet_switch": {
-      "model": "cosmacraft:block/r740_hex_flat"
+      "model": "cosmacraft:block/eth_switch"
     },
     "server_type=dell_psu": {
-      "model": "cosmacraft:block/r740_hex_flat"
+      "model": "cosmacraft:block/dell_psu"
     },
     "server_type=handlebar_2u": {
-      "model": "cosmacraft:block/r740_hex_flat"
+      "model": "cosmacraft:block/handlebar"
     },
     "server_type=me484_2u": {
-      "model": "cosmacraft:block/r740_hex_flat"
+      "model": "cosmacraft:block/me484_2u"
     },
     "server_type=lcdkvm": {
-      "model": "cosmacraft:block/r740_hex_flat"
+      "model": "cosmacraft:block/lcdkvm"
+    },
+    "server_type=lcdkvm_open": {
+      "model": "cosmacraft:block/lcdkvm_open"
     },
     "server_type=double_squares": {
-      "model": "cosmacraft:block/r740_hex_flat"
+      "model": "cosmacraft:block/double_squares"
     },
     "server_type=four_u_gap": {
-      "model": "cosmacraft:block/r740_hex_flat"
+      "model": "minecraft:block/air"
     },
     "server_type=one_u_hex": {
-      "model": "cosmacraft:block/r740_hex_flat"
+      "model": "cosmacraft:block/r6525_hex"
     },
     "server_type=three_u_hex": {
-      "model": "cosmacraft:block/r740_hex_flat"
+      "model": "cosmacraft:block/three_u_hex"
     },
     "server_type=mellanox_quantum_switch": {
-      "model": "cosmacraft:block/r740_hex_flat"
+      "model": "cosmacraft:block/mellanox_quantum_switch"
     },
     "server_type=r6525": {
-      "model": "cosmacraft:block/r740_hex_flat"
+      "model": "cosmacraft:block/r6525"
     },
     "server_type=atempo": {
-      "model": "cosmacraft:block/r740_hex_flat"
+      "model": "cosmacraft:block/r6525"
     },
     "server_type=fibre_switch": {
       "model": "cosmacraft:block/r740_hex_flat"
     },
     "server_type=mi50": {
-      "model": "cosmacraft:block/r740_hex_flat"
+      "model": "cosmacraft:block/mi50"
     },
     "server_type=two_u_ga_server": {
-      "model": "cosmacraft:block/r740_hex_flat"
+      "model": "cosmacraft:block/r740_hex"
     },
     "server_type=four_u_circles": {
-      "model": "cosmacraft:block/r740_hex_flat"
+      "model": "cosmacraft:block/circles"
     },
     "server_type=grey_4u_server": {
-      "model": "cosmacraft:block/r740_hex_flat"
+      "model": "cosmacraft:block/grey_4u"
     },
     "server_type=login_node_c8": {
-      "model": "cosmacraft:block/r740_hex_flat"
+      "model": "cosmacraft:block/c8_login"
     },
     "server_type=ethernet_switch_c8": {
-      "model": "cosmacraft:block/r740_hex_flat"
+      "model": "cosmacraft:block/eth_switch"
     }
   }
 }

@@ -21,7 +21,7 @@ public class LightBlock extends Block {
 
 
     public LightBlock() {
-        super(AbstractBlock.Properties.of(Material.GLASS, MaterialColor.COLOR_YELLOW).strength(15f).sound(SoundType.GLASS).noOcclusion().lightLevel((thing) -> 30).emissiveRendering((a, b, c) -> true));
+        super(AbstractBlock.Properties.of(Material.GLASS, MaterialColor.COLOR_YELLOW).strength(15f).sound(SoundType.GLASS).noOcclusion().lightLevel((thing) -> 60).emissiveRendering((a, b, c) -> true));
     }
 
     @Override

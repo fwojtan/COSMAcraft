@@ -42,6 +42,14 @@ public class RackTileEntityRenderer extends TileEntityRenderer<RackTileEntity> {
     public void render(RackTileEntity rackTileEntity, float partialTicks, MatrixStack matrixStack, IRenderTypeBuffer renderBuffers,
                        int combinedLight, int combinedOverlay) {
 
+        // this combined light stuff is a bit nonsense atm
+        combinedLight = Math.max(combinedLight, 10000000);
+        //if (rackTileEntity.serverStates.size()>0){
+            //System.out.println(rackTileEntity.serverStates.get(0));
+        //}
+        //System.out.println(combinedLight);
+        //System.out.println(combinedOverlay);
+
         matrixStack.pushPose();
 
         IVertexBuilder vertexBuffer = renderBuffers.getBuffer(RenderType.cutoutMipped());
@@ -110,8 +118,11 @@ public class RackTileEntityRenderer extends TileEntityRenderer<RackTileEntity> {
                         matrixStack.translate(ejectAmount.x, ejectAmount.y, ejectAmount.z);
                     }
 
-                    mc.getBlockRenderer().getModelRenderer().renderModel(rackTileEntity.getLevel(), serverType.getModel(), serverType.getState(), rackTileEntity.getBlockPos(), matrixStack, vertexBuffer, true, random, combinedLight, combinedOverlay, EmptyModelData.INSTANCE);
-
+                    if (serverType.getSerializedName() == "lcdkvm" && serverState.ejectProgress == 50){
+                        mc.getBlockRenderer().getModelRenderer().renderModel(rackTileEntity.getLevel(), ServerType.LCDKVM_OPEN.getModel(), serverType.getState(), rackTileEntity.getBlockPos(), matrixStack, vertexBuffer, true, random, combinedLight, combinedOverlay, EmptyModelData.INSTANCE);
+                    } else {
+                        mc.getBlockRenderer().getModelRenderer().renderModel(rackTileEntity.getLevel(), serverType.getModel(), serverType.getState(), rackTileEntity.getBlockPos(), matrixStack, vertexBuffer, true, random, combinedLight, combinedOverlay, EmptyModelData.INSTANCE);
+                    }
                     // move the matrix stack back so the rest of the servers can be rendered in the correct place
                     if (serverState.ejected == 1 || serverState.ejectProgress > 0) {
                         matrixStack.translate(0.0d, 0.0d, -1.0d * ejectAmount.z);

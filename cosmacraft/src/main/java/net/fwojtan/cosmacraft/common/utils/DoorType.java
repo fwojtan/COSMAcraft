@@ -13,7 +13,7 @@ import static net.fwojtan.cosmacraft.common.block.DoorBlock.RENDER_CHOICE;
 public enum DoorType implements IStringSerializable {
 
     C7_BACK(0, "cosma7", true),
-    C8_BACK(1, "cosma8", false),
+    C8_BACK(1, "cosma8", true),
     C6_BACK(2, "cosma6", false),
     STORAGE_BACK(3, "storage", false),
     NONE(4, "none", false);

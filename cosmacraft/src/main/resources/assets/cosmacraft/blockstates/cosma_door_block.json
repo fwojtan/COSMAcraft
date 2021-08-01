@@ -4,7 +4,7 @@
       "model": "cosmacraft:block/cosma7_door"
     },
     "door_type=cosma8": {
-      "model": "minecraft:block/air"
+      "model": "cosmacraft:block/cosma8_door"
     }
   }
 }
