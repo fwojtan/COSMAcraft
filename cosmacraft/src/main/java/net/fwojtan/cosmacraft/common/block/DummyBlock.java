@@ -27,13 +27,25 @@ import javax.annotation.Nullable;
 public class DummyBlock extends Block {
 
     public DummyBlock() {
-        super(AbstractBlock.Properties.of(Material.METAL, MaterialColor.COLOR_BLACK).strength(15f).sound(SoundType.METAL).noOcclusion());
+        super(AbstractBlock.Properties.of(Material.AIR, MaterialColor.COLOR_BLACK).strength(15f).sound(SoundType.METAL).noOcclusion());
     }
 
     @Override
     public boolean hasTileEntity(BlockState state) {
         return true;
     }
+
+    @Override
+    public boolean propagatesSkylightDown(BlockState p_200123_1_, IBlockReader p_200123_2_, BlockPos p_200123_3_) {
+        return true;
+    }
+
+    @Override
+    public int getLightBlock(BlockState p_200011_1_, IBlockReader p_200011_2_, BlockPos p_200011_3_) {
+        return 100;
+    }
+
+
 
     @Nullable
     @Override

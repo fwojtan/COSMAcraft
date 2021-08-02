@@ -21,19 +21,26 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.vector.Vector3i;
 import net.minecraftforge.fml.loading.FMLConfig;
 import net.minecraftforge.fml.loading.FMLPaths;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.time.DurationFormatUtils;
 
 import javax.annotation.Nullable;
 import java.io.*;
 import java.lang.reflect.Type;
+import java.net.Socket;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.Duration;
 import java.time.Instant;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
+import java.time.temporal.ChronoUnit;
+import java.time.temporal.TemporalAmount;
+import java.time.temporal.TemporalUnit;
+import java.util.*;
 
 import static net.fwojtan.cosmacraft.common.block.ParentBlock.FACING;
 import static net.fwojtan.cosmacraft.common.block.RackBlock.SHOULD_RENDER;
@@ -44,9 +51,12 @@ public class CosmaControlTileEntity extends ParentTileEntity{
     public CosmaControlTileEntity(){this(ModTileEntities.COSMA_CONTROL_TILE_ENTITY.get());}
 
     private boolean waiting = false;
+    private boolean firstTime = true;
     private Instant startTime = Instant.now();
     public Map<String, StateData> latestStateData;
     private int loopCounter = 0;
+    private final int cosmaPort = 5432;
+    private Instant lastReceived = startTime.minus(1, ChronoUnit.HOURS);
 
     @Override
     public void tick() {
@@ -63,8 +73,15 @@ public class CosmaControlTileEntity extends ParentTileEntity{
             startTime = Instant.now();
             waiting = true;
 
+            if (firstTime){
+                firstTime=false;
+                verifyConnection();
+                fetchLatestConfigData();
+            }
+
             // Do stuff here
-            getLatestStateData();
+            fetchLatestStateData();
+            loadLatestStateData();
 
 
 
@@ -91,7 +108,7 @@ public class CosmaControlTileEntity extends ParentTileEntity{
 
     }
 
-    public void getLatestStateData(){
+    private void loadLatestStateData(){
         if (!getLevel().isClientSide()){
             Map<String, StateData> stateDataMap = null;
             Type stateDataType = new TypeToken<HashMap<String, StateData>>(){}.getType();
@@ -114,7 +131,113 @@ public class CosmaControlTileEntity extends ParentTileEntity{
             latestStateData =  stateDataMap;
 
             System.out.println("Updated state data to latest version for controller on server thread");
+
         }
+    }
+
+    private void fetchLatestStateData(){
+        if (!getLevel().isClientSide()) {
+            Path configLocation = FMLPaths.getOrCreateGameRelativePath(Paths.get("util/cosma_config/"), "cosma_config_path");
+
+            DateTimeFormatter formatter = DateTimeFormatter.ofLocalizedDateTime( FormatStyle.SHORT ).withLocale( Locale.UK ).withZone( ZoneId.systemDefault() );
+            String lastReceivedString = formatter.format(lastReceived);
+            System.out.println("Fetching latest usage data from COSMA on port "+cosmaPort+"... (was last sent at "+lastReceivedString+")");
+
+            try {
+                Socket socket = new Socket("localhost", cosmaPort);
+                DataInputStream dataIn = new DataInputStream(socket.getInputStream());
+                DataOutputStream dataOut = new DataOutputStream(socket.getOutputStream());
+
+
+                dataOut.writeUTF("MCServer requesting state data &"+lastReceivedString);
+                dataOut.flush();
+
+                String response = readInputStream(dataIn);
+                if (response.length() > 100) {
+                    File file = new File(configLocation.toString() + "/cosma_usage_latest.json");
+                    FileWriter writer = new FileWriter(file.getPath());
+                    writer.write(response);
+                    writer.close();
+                    System.out.println("Wrote latest state data to file!");
+                    lastReceived = Instant.now();
+                } else {
+                    System.out.println("Received response: "+response);
+                }
+                socket.close();
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private void fetchLatestConfigData(){
+        if (!getLevel().isClientSide()) {
+            Path configLocation = FMLPaths.getOrCreateGameRelativePath(Paths.get("util/cosma_config/"), "cosma_config_path");
+            System.out.println("Fetching latest config data from COSMA on port "+cosmaPort+"...");
+
+            try {
+                Socket socket = new Socket("localhost", cosmaPort);
+                DataInputStream dataIn = new DataInputStream(socket.getInputStream());
+                DataOutputStream dataOut = new DataOutputStream(socket.getOutputStream());
+
+                dataOut.writeUTF("MCServer requesting config data");
+                dataOut.flush();
+
+                File file = new File(configLocation.toString() + "/cosma_config.json");
+                FileWriter writer = new FileWriter(file.getPath());
+                writer.write(readInputStream(dataIn));
+                writer.close();
+                System.out.println("Wrote latest config data to file!");
+                socket.close();
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private void verifyConnection(){
+        if (!getLevel().isClientSide()) {
+
+            System.out.println("Checking connection to COSMA on port "+cosmaPort+"...");
+
+            try {
+                Socket socket = new Socket("localhost", cosmaPort);
+                DataInputStream dataIn = new DataInputStream(socket.getInputStream());
+                DataOutputStream dataOut = new DataOutputStream(socket.getOutputStream());
+
+                dataOut.writeUTF("MCServer testing connection");
+                dataOut.flush();
+
+                String response = readInputStream(dataIn);
+
+                System.out.println("Connection verified! (Response: "+response+")");
+                socket.close();
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private String readInputStream(DataInputStream dataIn){
+        StringBuilder result = new StringBuilder();
+
+        while (true) {
+            byte[] b = new byte[1024];
+            int readStatus = 0;
+            try {
+                readStatus = dataIn.read(b, 0, 1024);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            result.append((new String(b, StandardCharsets.UTF_8)).replace("\0", ""));
+            if (readStatus == -1) {
+                break;
+            }
+        }
+        return result.toString();
     }
 
 

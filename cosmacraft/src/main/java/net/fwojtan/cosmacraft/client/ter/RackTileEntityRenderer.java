@@ -43,9 +43,9 @@ public class RackTileEntityRenderer extends TileEntityRenderer<RackTileEntity> {
                        int combinedLight, int combinedOverlay) {
 
         // this combined light stuff is a bit nonsense atm
-        combinedLight = Math.max(combinedLight, 10000000);
+        //combinedLight = Math.max(combinedLight, 10000000);
         //if (rackTileEntity.serverStates.size()>0){
-            //System.out.println(rackTileEntity.serverStates.get(0));
+        //    System.out.println(rackTileEntity.serverStates.get(0));
         //}
         //System.out.println(combinedLight);
         //System.out.println(combinedOverlay);
