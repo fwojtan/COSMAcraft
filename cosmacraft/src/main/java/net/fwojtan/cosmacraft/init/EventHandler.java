@@ -3,19 +3,12 @@ package net.fwojtan.cosmacraft.init;
 import net.fwojtan.cosmacraft.CosmaCraft;
 import net.fwojtan.cosmacraft.client.ter.RackTileEntityRenderer;
 import net.fwojtan.cosmacraft.common.tileentity.ChildTileEntity;
-import net.fwojtan.cosmacraft.common.tileentity.CosmaControlTileEntity;
 import net.fwojtan.cosmacraft.common.tileentity.ParentTileEntity;
-import net.minecraft.client.renderer.RenderState;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.RenderTypeLookup;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import net.minecraft.item.BlockItemUseContext;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IWorld;
-import net.minecraft.world.World;
-import net.minecraftforge.client.model.obj.OBJLoader;
-import net.minecraftforge.client.model.obj.OBJModel;
+import net.minecraftforge.client.event.ColorHandlerEvent;
 import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
@@ -57,6 +50,7 @@ public class EventHandler {
             world.destroyBlock(childTileEntity.parentPosition, true);
         }
     }
+
 
     private void checkAndDestroyParent(IWorld world, BlockPos pos){
         if (world.getBlockEntity(pos) instanceof ParentTileEntity){

@@ -1,5 +1,7 @@
 package net.fwojtan.cosmacraft.common.block;
 
+import net.fwojtan.cosmacraft.common.utils.ColorChoice;
+import net.fwojtan.cosmacraft.common.utils.ColorChoiceProperty;
 import net.fwojtan.cosmacraft.common.utils.ServerType;
 import net.fwojtan.cosmacraft.common.utils.ServerTypeProperty;
 import net.minecraft.block.AbstractBlock;
@@ -18,6 +20,7 @@ import javax.annotation.Nullable;
 public class ServerBlock extends Block {
 
     public static final  EnumProperty<ServerType> RENDER_CHOICE=  ServerTypeProperty.create("server_type", ServerType.class);
+    public static final EnumProperty<ColorChoice> COLOR_CHOICE_ENUM_PROPERTY = ColorChoiceProperty.create("color_choice", ColorChoice.class);
     public static final DirectionProperty THiNG = DirectionProperty.create("test_dir");
 
     public ServerBlock() {
@@ -27,13 +30,14 @@ public class ServerBlock extends Block {
     @Nullable
     @Override
     public BlockState getStateForPlacement(BlockItemUseContext context) {
-        return this.defaultBlockState().setValue(RENDER_CHOICE, ServerType.ONE_U_GAP);
+        return this.defaultBlockState().setValue(RENDER_CHOICE, ServerType.ONE_U_GAP).setValue(COLOR_CHOICE_ENUM_PROPERTY, ColorChoice.NONE);
     }
 
     @Override
     protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder) {
         super.createBlockStateDefinition(builder);
         builder.add(RENDER_CHOICE);
+        builder.add(COLOR_CHOICE_ENUM_PROPERTY);
 
     }
 

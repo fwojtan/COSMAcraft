@@ -9,7 +9,28 @@
     "server_type=one_u_horizontal_drives": {
       "model": "cosmacraft:block/horizontal_drives"
     },
-    "server_type=c_6525": {
+    "color_choice=red,server_type=c_6525": {
+        "model": "cosmacraft:block/c_6525_r"
+    },
+    "color_choice=yellow,server_type=c_6525": {
+      "model": "cosmacraft:block/c_6525_y"
+    },
+    "color_choice=green1,server_type=c_6525": {
+      "model": "cosmacraft:block/c_6525_g1"
+    },
+    "color_choice=green2,server_type=c_6525": {
+      "model": "cosmacraft:block/c_6525_g2"
+    },
+    "color_choice=green3,server_type=c_6525": {
+      "model": "cosmacraft:block/c_6525_g3"
+    },
+    "color_choice=green4,server_type=c_6525": {
+      "model": "cosmacraft:block/c_6525_g4"
+    },
+    "color_choice=green5,server_type=c_6525": {
+      "model": "cosmacraft:block/c_6525_g5"
+    },
+    "color_choice=none,server_type=c_6525": {
       "model": "cosmacraft:block/c_6525"
     },
     "server_type=me484": {

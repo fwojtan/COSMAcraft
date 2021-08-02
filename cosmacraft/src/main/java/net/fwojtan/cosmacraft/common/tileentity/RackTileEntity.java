@@ -77,6 +77,8 @@ public class RackTileEntity extends ParentTileEntity {
 
                 }
 
+                serverState.pickColorChoice();
+
             }
             System.out.println("Attempted to update state list");
         } else {System.out.println("Skipped statelist update due to null data");}

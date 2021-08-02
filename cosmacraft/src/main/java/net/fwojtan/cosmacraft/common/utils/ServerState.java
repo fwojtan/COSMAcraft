@@ -25,6 +25,9 @@ public class ServerState {
     public int ejected;
     public int ejectProgress;
 
+    public float averageUsage = 0.0f;
+    public ColorChoice colorChoice = ColorChoice.NONE;
+
     public boolean isComputeNode;
 
     public ServerState(String serverName, int ejected, boolean isComputeNode){
@@ -45,6 +48,8 @@ public class ServerState {
         this.updateTime = new ArrayList<>();
         this.ejected = ejected;
         this.ejectProgress = 0;
+
+
     }
 
     public void printStateToPlayer(PlayerEntity player, ServerType type){
@@ -86,6 +91,34 @@ public class ServerState {
         sb.deleteCharAt(sb.length()-1);
         retval = sb.toString();
         return retval;
+    }
+
+    public void pickColorChoice(){
+        for (String usage : cpuUsage){
+            averageUsage += Float.parseFloat(usage);
+        }
+        averageUsage /= 4.0f;
+
+        for (String state : status){
+            if (state == "drain"){colorChoice = ColorChoice.YELLOW;}
+        }
+        for (String state : status){
+            if (state == "fail" || state == "down"){colorChoice = ColorChoice.RED;}
+        }
+
+        if (colorChoice == ColorChoice.NONE && averageUsage > 0.0f){
+            if (averageUsage < 20.0f){
+                colorChoice = ColorChoice.GREEN1;
+            } else if (averageUsage < 40.0f){
+                colorChoice = ColorChoice.GREEN2;
+            } else if (averageUsage < 60.0f){
+                colorChoice = ColorChoice.GREEN3;
+            } else if (averageUsage < 80.0f){
+                colorChoice = ColorChoice.GREEN4;
+            } else {
+                colorChoice = ColorChoice.GREEN5;
+            }
+        }
     }
 
 }
