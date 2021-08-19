@@ -57,6 +57,7 @@ public class CosmaControlTileEntity extends ParentTileEntity{
     private int loopCounter = 0;
     private final int cosmaPort = 5432;
     private Instant lastReceived = startTime.minus(1, ChronoUnit.HOURS);
+    public boolean displayDataOverlay = false;
 
     @Override
     public void tick() {

@@ -1,9 +1,11 @@
 package net.fwojtan.cosmacraft.init;
 
 import net.fwojtan.cosmacraft.CosmaCraft;
+import net.fwojtan.cosmacraft.common.CosmaCraftItemGroup;
 import net.minecraft.block.Block;
 import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemGroup;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraftforge.client.model.obj.OBJLoader;
 import net.minecraftforge.common.MinecraftForge;
@@ -22,6 +24,7 @@ public class Registration {
     public static final DeferredRegister<TileEntityType<?>> TILE_ENTITY = DeferredRegister.create(ForgeRegistries.TILE_ENTITIES, CosmaCraft.MOD_ID);
     public static final DeferredRegister<ContainerType<?>> CONTAINER = DeferredRegister.create(ForgeRegistries.CONTAINERS, CosmaCraft.MOD_ID);
 
+    public static final CosmaCraftItemGroup cosmaCraftItemGroup = new CosmaCraftItemGroup("COSMAcraft");
 
     public static void register() {
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();

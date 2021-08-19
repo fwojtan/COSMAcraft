@@ -100,7 +100,7 @@ public class ServerState {
         averageUsage /= 4.0f;
 
         for (String state : status){
-            if (state == "drain"){colorChoice = ColorChoice.YELLOW;}
+            if (state == "drain" || state =="maint"){colorChoice = ColorChoice.YELLOW;}
         }
         for (String state : status){
             if (state == "fail" || state == "down"){colorChoice = ColorChoice.RED;}

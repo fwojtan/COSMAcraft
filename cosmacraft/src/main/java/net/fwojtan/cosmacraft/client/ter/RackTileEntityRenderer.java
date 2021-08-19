@@ -3,6 +3,7 @@ package net.fwojtan.cosmacraft.client.ter;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
 import net.fwojtan.cosmacraft.common.block.ServerBlock;
+import net.fwojtan.cosmacraft.common.tileentity.CosmaControlTileEntity;
 import net.fwojtan.cosmacraft.common.tileentity.RackTileEntity;
 import net.fwojtan.cosmacraft.common.utils.*;
 import net.fwojtan.cosmacraft.init.ModBlocks;
@@ -25,6 +26,7 @@ import net.minecraft.util.math.vector.Vector3i;
 import net.minecraft.world.LightType;
 import net.minecraftforge.client.model.data.EmptyModelData;
 
+import java.util.Objects;
 import java.util.Random;
 
 
@@ -107,6 +109,7 @@ public class RackTileEntityRenderer extends TileEntityRenderer<RackTileEntity> {
 
     private void renderServers(RackTileEntity rackTileEntity, MatrixStack matrixStack, IRenderTypeBuffer renderBuffers, IVertexBuilder vertexBuffer, Random random, int combinedLight, int combinedOverlay){
         if (rackTileEntity.serverStates.size() == rackTileEntity.serverTypes.size()) {
+            //System.out.println("Raw brightness at"+rackTileEntity.getBlockPos().toString()+" :"+rackTileEntity.getLevel().getLightEngine().getRawBrightness(rackTileEntity.getBlockPos(), 0));
             for (int i = 0; i < rackTileEntity.serverTypes.size(); i++) {
                 ServerType serverType = rackTileEntity.serverTypes.get(i);
                 ServerState serverState = rackTileEntity.serverStates.get(i);
@@ -121,7 +124,10 @@ public class RackTileEntityRenderer extends TileEntityRenderer<RackTileEntity> {
 
                     if (serverType.getSerializedName() == "lcdkvm" && serverState.ejectProgress == 50){
                         mc.getBlockRenderer().getModelRenderer().renderModel(rackTileEntity.getLevel(), ServerType.LCDKVM_OPEN.getModel(), serverType.getState(), rackTileEntity.getBlockPos(), matrixStack, vertexBuffer, true, random, combinedLight, combinedOverlay, EmptyModelData.INSTANCE);
-                    } else if (serverType.getSerializedName() == "c_6525" && serverState.isComputeNode) {
+                    } else if (serverType.getSerializedName() == "c_6525" &&
+                            serverState.isComputeNode &&
+                            ((CosmaControlTileEntity) Objects.requireNonNull(Objects.requireNonNull(rackTileEntity.getLevel())
+                                    .getBlockEntity(rackTileEntity.getControllerPosition()))).displayDataOverlay) {
 
                         IBakedModel model = mc.getBlockRenderer().getBlockModel(ModBlocks.SERVER_MODEL_BLOCK.get().defaultBlockState().setValue(ServerBlock.RENDER_CHOICE, serverType).setValue(ServerBlock.COLOR_CHOICE_ENUM_PROPERTY, serverState.colorChoice));
                         mc.getBlockRenderer().getModelRenderer().renderModel(rackTileEntity.getLevel(), model, serverType.getState(), rackTileEntity.getBlockPos(), matrixStack, vertexBuffer, true, random, combinedLight, combinedOverlay, EmptyModelData.INSTANCE);

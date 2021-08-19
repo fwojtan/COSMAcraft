@@ -1,7 +1,6 @@
 package net.fwojtan.cosmacraft.common.block;
 
-import net.fwojtan.cosmacraft.common.tileentity.ChildTileEntity;
-import net.fwojtan.cosmacraft.common.tileentity.RackTileEntity;
+import net.fwojtan.cosmacraft.common.tileentity.*;
 import net.fwojtan.cosmacraft.init.ModTileEntities;
 import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.Block;
@@ -27,7 +26,7 @@ import javax.annotation.Nullable;
 public class DummyBlock extends Block {
 
     public DummyBlock() {
-        super(AbstractBlock.Properties.of(Material.AIR, MaterialColor.COLOR_BLACK).strength(15f).sound(SoundType.METAL).noOcclusion());
+        super(AbstractBlock.Properties.of(Material.STRUCTURAL_AIR, MaterialColor.NONE).strength(15f).sound(SoundType.METAL).noOcclusion());
     }
 
     @Override
@@ -60,12 +59,18 @@ public class DummyBlock extends Block {
         TileEntity tileEntity = world.getBlockEntity(pos);
         if (world.getBlockEntity(pos) != null) {
             if (tileEntity instanceof ChildTileEntity){
-                TileEntity parentEntity = world.getBlockEntity(((ChildTileEntity) tileEntity).parentPosition);
-                if (parentEntity instanceof RackTileEntity){
-                    ((RackTileEntity) parentEntity).onUse(yHit, yAngle, player.getMainHandItem(), player.isShiftKeyDown(), player);
-                }
-            } else if (tileEntity instanceof RackTileEntity) {
+                tileEntity = world.getBlockEntity(((ChildTileEntity) tileEntity).parentPosition);
+
+            }
+
+            if (tileEntity instanceof RackTileEntity) {
                 ((RackTileEntity) tileEntity).onUse(yHit, yAngle, player.getMainHandItem(), player.isShiftKeyDown(), player);
+            } else if (tileEntity instanceof EmptyRackTileEntity){
+
+            } else if (tileEntity instanceof LargePowerTileEntity){
+
+            } else if (tileEntity instanceof SmallPowerTileEntity){
+
             }
 
 

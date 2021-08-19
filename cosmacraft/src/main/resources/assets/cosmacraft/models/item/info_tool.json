@@ -1,6 +1,6 @@
 {
   "parent": "item/generated",
   "textures": {
-    "layer0": "cosmacraft:item/light_strip_icon"
+    "layer0": "cosmacraft:item/info_tool"
   }
 }

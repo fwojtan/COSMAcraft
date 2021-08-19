@@ -1,3 +1,13 @@
 {
-  "block.cosmacraft.dummy_block": "Transparent Block"
+  "block.cosmacraft.dummy_block": "Transparent Block",
+  "block.cosmacraft.small_power_block": "Small Power Supply",
+  "item.cosmacraft.info_tool": "Information Tool",
+  "item.cosmacraft.eject_tool": "Server Eject Tool",
+  "block.cosmacraft.light_block": "Light Strip",
+  "block.cosmacraft.cosma_control_block": "Control Block (Do not use!)",
+  "block.cosmacraft.large_power_block": "Large Power Supply",
+  "item.cosmacraft.data_tool": "Data Visualiser",
+  "item.cosmacraft.door_tool": "Door Key",
+  "itemGroup.COSMAcraft": "COSMAcraft",
+  "block.cosmacraft.empty_rack_block": "Empty Server Rack"
 }

@@ -1,9 +1,6 @@
 package net.fwojtan.cosmacraft.init;
 
-import net.fwojtan.cosmacraft.common.tileentity.ChildTileEntity;
-import net.fwojtan.cosmacraft.common.tileentity.CosmaControlTileEntity;
-import net.fwojtan.cosmacraft.common.tileentity.ParentTileEntity;
-import net.fwojtan.cosmacraft.common.tileentity.RackTileEntity;
+import net.fwojtan.cosmacraft.common.tileentity.*;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraftforge.fml.RegistryObject;
 
@@ -28,6 +25,21 @@ public class ModTileEntities {
             = Registration.TILE_ENTITY.register("cosma_control_block", () ->
             TileEntityType.Builder.of(CosmaControlTileEntity::new,
                     ModBlocks.COSMA_CONTROL_BLOCK.get()).build(null));
+
+    public static final RegistryObject<TileEntityType<SmallPowerTileEntity>> SMALL_POWER_TILE_ENTITY
+            = Registration.TILE_ENTITY.register("small_power_block", () ->
+            TileEntityType.Builder.of(SmallPowerTileEntity::new,
+                    ModBlocks.SMALL_POWER_BLOCK.get()).build(null));
+
+    public static final RegistryObject<TileEntityType<LargePowerTileEntity>> LARGE_POWER_TILE_ENTITY
+            = Registration.TILE_ENTITY.register("large_power_block", () ->
+            TileEntityType.Builder.of(LargePowerTileEntity::new,
+                    ModBlocks.LARGE_POWER_BLOCK.get()).build(null));
+
+    public static final RegistryObject<TileEntityType<EmptyRackTileEntity>> EMPTY_RACK_TILE_ENTITY
+            = Registration.TILE_ENTITY.register("empty_rack_block", () ->
+            TileEntityType.Builder.of(EmptyRackTileEntity::new,
+                    ModBlocks.EMPTY_RACK_BLOCK.get()).build(null));
 
     static void register() {}
 }

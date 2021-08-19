@@ -14,13 +14,16 @@ import java.util.function.Supplier;
 
 public class ModBlocks {
 
-    public static final RegistryObject<Block> DUMMY_BLOCK = register("dummy_block", () -> new DummyBlock());
-    public static final RegistryObject<Block> PARENT_BLOCK = register("parent_block", () -> new ParentBlock());
-    public static final RegistryObject<Block> RACK_BLOCK = register("rack_block", () -> new RackBlock());
+    public static final RegistryObject<Block> DUMMY_BLOCK = registerNoItem("dummy_block", () -> new DummyBlock());
+    public static final RegistryObject<Block> PARENT_BLOCK = registerNoItem("parent_block", () -> new ParentBlock());
+    public static final RegistryObject<Block> RACK_BLOCK = registerNoItem("rack_block", () -> new RackBlock());
     public static final RegistryObject<Block> COSMA_CONTROL_BLOCK = register("cosma_control_block", () -> new CosmaControlBlock());
     public static final RegistryObject<Block> SERVER_MODEL_BLOCK = registerNoItem("server_model_block", () -> new ServerBlock());
     public static final RegistryObject<Block> COSMA_DOOR_BLOCK = registerNoItem("cosma_door_block", () -> new DoorBlock());
     public static final RegistryObject<Block> LIGHT_BLOCK = register("light_block", () -> new LightBlock());
+    public static final RegistryObject<Block> SMALL_POWER_BLOCK = register("small_power_block", () -> new SmallPowerBlock());
+    public static final RegistryObject<Block> LARGE_POWER_BLOCK = register("large_power_block", () -> new LargePowerBlock());
+    public static final RegistryObject<Block> EMPTY_RACK_BLOCK = register("empty_rack_block", () -> new EmptyRackBlock());
 
 
     static void register() {}
@@ -31,7 +34,7 @@ public class ModBlocks {
 
     private static <T extends Block> RegistryObject<T> register(String name, Supplier<T> block) {
         RegistryObject<T> ret = registerNoItem(name, block);
-        Registration.ITEMS.register(name, () -> new BlockItem(ret.get(), new Item.Properties().tab(ItemGroup.TAB_BUILDING_BLOCKS)));
+        Registration.ITEMS.register(name, () -> new BlockItem(ret.get(), new Item.Properties().tab(Registration.cosmaCraftItemGroup)));
         return ret;
     }
 }

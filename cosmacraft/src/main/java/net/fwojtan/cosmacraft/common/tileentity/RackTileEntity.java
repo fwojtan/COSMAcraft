@@ -3,6 +3,7 @@ package net.fwojtan.cosmacraft.common.tileentity;
 import net.fwojtan.cosmacraft.common.utils.DoorType;
 import net.fwojtan.cosmacraft.common.utils.ServerState;
 import net.fwojtan.cosmacraft.common.utils.ServerType;
+import net.fwojtan.cosmacraft.init.ModItems;
 import net.fwojtan.cosmacraft.init.ModTileEntities;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
@@ -25,6 +26,7 @@ import net.minecraft.util.math.vector.Vector3i;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class RackTileEntity extends ParentTileEntity {
 
@@ -84,31 +86,7 @@ public class RackTileEntity extends ParentTileEntity {
         } else {System.out.println("Skipped statelist update due to null data");}
     }
 
-    private void createServerList(){
-        serverTypes = new ArrayList<ServerType>();
-        for (int i=0; i<3; i++){
-            serverTypes.add(ServerType.TWO_U_HEX);
-        }
-        for (int i=0; i<3; i++){
-            serverTypes.add(ServerType.R740_HEX_FLAT);
-        }
 
-        for (int i=0; i<2; i++){
-            serverTypes.add(ServerType.ONE_U_HORIZONTAL_DRIVES);
-        }
-
-        serverTypes.add(ServerType.MELLANOX_EDR);
-        serverTypes.add(ServerType.TWO_U_HEX);
-
-        for (int i=0; i<5; i++){
-            serverTypes.add(ServerType.C_6525);
-        }
-
-        serverTypes.add(ServerType.ME_484);
-        serverTypes.add(ServerType.MD_3420);
-
-        listInitialized = true;
-    }
 
     @Override
     public List<BlockPos> createChildPositonList() {
@@ -263,29 +241,39 @@ public class RackTileEntity extends ParentTileEntity {
         double serverHeight = yHit-getBlockPos().getY() - serverOffset * Math.tan(Math.acos(yAngle) - Math.PI / 2);
         int serverHitIndex = getServerListIndexFromY(serverHeight);
 
-        if (item.sameItem(Items.STICK.getDefaultInstance()) && serverHitIndex>0) {
-            this.serverStates.get(serverHitIndex).ejected = 1;
-            System.out.println("Ejecting server");
-        }
+        if (item.sameItem(ModItems.EJECT_TOOL.get().getDefaultInstance()) && serverHitIndex>0) {
+            if (this.serverStates.get(serverHitIndex).ejected == 0){
+                this.serverStates.get(serverHitIndex).ejected = 1;
+                System.out.println("Ejecting server");
+            } else {this.serverStates.get(serverHitIndex).ejected = 0;}
 
-        else if (item.sameItem(Items.WOODEN_SWORD.getDefaultInstance())){
-            this.doorOpen = 1;
-        }
-
-        else if (shiftKeyDown) {
-            System.out.println("Triggered server de-eject");
-            for (ServerState serverState : serverStates) {
-                serverState.ejected = 0;
+            if (shiftKeyDown) {
+                System.out.println("Putting all servers back");
+                for (ServerState serverState : serverStates) {
+                    serverState.ejected = 0;
+                }
             }
-            doorOpen = 0;
+
 
         }
-        else {
+
+        else if (item.sameItem(ModItems.DOOR_TOOL.get().getDefaultInstance())){
+            if (this.doorOpen == 0) {
+                this.doorOpen = 1;
+            } else {this.doorOpen = 0;}
+        }
+
+
+        else if (item.sameItem((ModItems.INFO_TOOL.get().getDefaultInstance()))){
             if (level.isClientSide()) {
                 if (serverHitIndex >= 0) {
                     this.serverStates.get(serverHitIndex).printStateToPlayer(player, this.serverTypes.get(serverHitIndex));
                 }
             }
+        }
+
+        else if (item.sameItem((ModItems.DATA_TOOL.get().getDefaultInstance()))){
+            ((CosmaControlTileEntity) Objects.requireNonNull(Objects.requireNonNull(this.getLevel()).getBlockEntity(this.controllerPosition))).displayDataOverlay ^= true;
         }
 
     }
@@ -305,16 +293,6 @@ public class RackTileEntity extends ParentTileEntity {
         return 0;
     }
 
-    public void destroyChildren(){
-        System.out.println(this.childPositionList);
-        System.out.println(this.childPositionList.get(0));
-    }
-
-    public void createFreshStateList(){
-        for (ServerType serverType : serverTypes){
-            this.serverStates.add(new ServerState("a", 0,false));
-        }
-    }
 
     @Override
     public void load(BlockState state, CompoundNBT nbtTag){
