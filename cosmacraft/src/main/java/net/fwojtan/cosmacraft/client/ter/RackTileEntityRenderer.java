@@ -26,6 +26,10 @@ import net.minecraft.util.math.vector.Vector3i;
 import net.minecraft.world.LightType;
 import net.minecraftforge.client.model.data.EmptyModelData;
 
+import java.time.Duration;
+import java.time.Instant;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import java.util.Random;
 
@@ -40,18 +44,13 @@ public class RackTileEntityRenderer extends TileEntityRenderer<RackTileEntity> {
     }
 
     private Minecraft mc = Minecraft.getInstance();
+    private List<Long> list= new ArrayList<>();
 
     @Override
     public void render(RackTileEntity rackTileEntity, float partialTicks, MatrixStack matrixStack, IRenderTypeBuffer renderBuffers,
                        int combinedLight, int combinedOverlay) {
 
-        // this combined light stuff is a bit nonsense atm
-        //combinedLight = Math.max(combinedLight, 10000000);
-        //if (rackTileEntity.serverStates.size()>0){
-        //    System.out.println(rackTileEntity.serverStates.get(0));
-        //}
-        //System.out.println(combinedLight);
-        //System.out.println(combinedOverlay);
+        Instant startTime = Instant.now();
 
         matrixStack.pushPose();
 
@@ -68,19 +67,28 @@ public class RackTileEntityRenderer extends TileEntityRenderer<RackTileEntity> {
 
         Vector3f cableColor = new Vector3f(0.58f,0.50f,1.00f);
 
-        /*
-        renderCable(new Vector3d(0.4, 0.5, 0.15), new Vector3d(0.05, 1,
-                0.05), matrixStack, renderBuffers, rackTileEntity, cableColor);
-        renderCable(new Vector3d(0.6, 0.5, 0.15), new Vector3d(0.95, 1,
-                0.05), matrixStack, renderBuffers, rackTileEntity, cableColor);
-
-        renderCable(new Vector3d(0.4, 2.0, 0.15), new Vector3d(0.05, 2.5,
-                0.05), matrixStack, renderBuffers, rackTileEntity, cableColor);
-        renderCable(new Vector3d(0.6, 2.0, 0.15), new Vector3d(0.95, 2.5,
-                0.05), matrixStack, renderBuffers, rackTileEntity, cableColor);
-        */
 
         matrixStack.popPose();
+
+
+
+        CosmaControlTileEntity controlTileEntity = (CosmaControlTileEntity) rackTileEntity.getLevel().getBlockEntity(rackTileEntity.getControllerPosition());
+        if (controlTileEntity != null){
+            if (controlTileEntity.collectTimingData){
+                list.add(Duration.between(startTime, Instant.now()).toNanos());
+
+
+                if (list.size() == ((CosmaControlTileEntity)rackTileEntity.getLevel().getBlockEntity(rackTileEntity.getControllerPosition())).childPositionList.size()) {
+                    controlTileEntity.timingData.add(list);
+                    list = new ArrayList<>();
+                    System.out.println("Added a list to the main list... List now has "+controlTileEntity.timingData.size()+"entries...");
+                }
+
+            }
+
+        }
+
+
 
 
     }

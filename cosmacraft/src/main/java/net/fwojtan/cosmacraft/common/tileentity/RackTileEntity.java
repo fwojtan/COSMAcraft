@@ -47,12 +47,12 @@ public class RackTileEntity extends ParentTileEntity {
     public void tick() {
         super.tick();
 
-        if (loopCounter == 40){
+        if (loopCounter == 280 && ((CosmaControlTileEntity)getLevel().getBlockEntity(getControllerPosition())).getChildrenPlaced()){
             updateStateList();
         }
 
-        if (loopCounter > 1241){
-            loopCounter = 41;
+        if (loopCounter > 1481){
+            loopCounter = 281;
             // update with latest state data here?
             updateStateList();
         }
@@ -69,12 +69,16 @@ public class RackTileEntity extends ParentTileEntity {
                 if (serverState.isComputeNode) {
                     for (int i = 0; i < serverState.serverName.size(); i++) {
                         String name = serverState.serverName.get(i);
-                        serverState.updateTime.add(i, controller.latestStateData.get(name).updated);
-                        serverState.jobName.add(i, controller.latestStateData.get(name).job);
-                        serverState.jobDuration.add(i, controller.latestStateData.get(name).runtime);
-                        serverState.status.add(i, controller.latestStateData.get(name).state);
+                        if (name == null){System.out.println("name was null!!");}
+                        boolean nullValue = false;
+                        //System.out.println(name+" ... "+controller.latestStateData.get(name).updated);
+                        if (controller.latestStateData.get(name).updated != null){serverState.updateTime.add(i, controller.latestStateData.get(name).updated);} else {serverState.updateTime.add(i,"Error updating");nullValue=true;}
+                        if (controller.latestStateData.get(name).job != null){serverState.jobName.add(i, controller.latestStateData.get(name).job);} else {serverState.updateTime.add(i,"Error updating");nullValue=true;}
+                        if (controller.latestStateData.get(name).runtime != null){serverState.jobDuration.add(i, controller.latestStateData.get(name).runtime);} else {serverState.updateTime.add(i,"Error updating");nullValue=true;}
+                        if (controller.latestStateData.get(name).state != null){serverState.status.add(i, controller.latestStateData.get(name).state);} else {serverState.updateTime.add(i,"Error updating");nullValue=true;}
                         serverState.cpuUsage.add(i, String.valueOf(controller.latestStateData.get(name).cpu));
                         serverState.memUsage.add(i, String.valueOf(controller.latestStateData.get(name).mem));
+                        if (nullValue){System.out.println("Detected a null value when updating "+name);}
                     }
 
                 }
@@ -254,6 +258,8 @@ public class RackTileEntity extends ParentTileEntity {
                 }
             }
 
+            getLevel().sendBlockUpdated(getBlockPos(), getBlockState(), getBlockState(), 2);
+
 
         }
 
@@ -261,6 +267,7 @@ public class RackTileEntity extends ParentTileEntity {
             if (this.doorOpen == 0) {
                 this.doorOpen = 1;
             } else {this.doorOpen = 0;}
+            getLevel().sendBlockUpdated(getBlockPos(), getBlockState(), getBlockState(), 2);
         }
 
 
@@ -274,7 +281,10 @@ public class RackTileEntity extends ParentTileEntity {
 
         else if (item.sameItem((ModItems.DATA_TOOL.get().getDefaultInstance()))){
             ((CosmaControlTileEntity) Objects.requireNonNull(Objects.requireNonNull(this.getLevel()).getBlockEntity(this.controllerPosition))).displayDataOverlay ^= true;
+            getLevel().sendBlockUpdated(controllerPosition, getLevel().getBlockState(controllerPosition), getLevel().getBlockState(controllerPosition), 2);
         }
+
+
 
     }
 

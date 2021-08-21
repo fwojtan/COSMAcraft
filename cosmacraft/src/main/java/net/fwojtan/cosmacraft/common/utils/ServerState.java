@@ -54,26 +54,32 @@ public class ServerState {
 
     public void printStateToPlayer(PlayerEntity player, ServerType type){
         String message = "";
+
         if (!(type.getSerializedName().contains("gap"))) {
-            if (isComputeNode && serverName.size() > 0) {
-                message += "This chassis contains 4 compute nodes:\n";
-                message += "NAME   STATUS  CPU USE  MEMORY USE  RUNTIME    JOB NAME \n";
-                for (int i=0; i<serverName.size(); i++){
-                    message += serverName.get(i) + "  "
-                            + StringUtils.rightPad(status.get(i), 6, " ") + "    "
-                            + StringUtils.rightPad(cpuUsage.get(i).substring(0, Math.min(5, cpuUsage.get(i).length())), 5, "0") + "%    "
-                            + StringUtils.rightPad(memUsage.get(i).substring(0, Math.min(5, memUsage.get(i).length())), 5, "0") + "%         "
-                            + StringUtils.rightPad(jobDuration.get(i), 12, " ") + "  "
-                            + jobName.get(i) + "\n";
+
+            try {
+                if (isComputeNode && serverName.size() > 0) {
+                    message += "This chassis contains 4 compute nodes:\n";
+                    message += "NAME   STATUS  CPU USE  MEMORY USE  RUNTIME    JOB NAME \n";
+                    for (int i = 0; i < serverName.size(); i++) {
+                        message += serverName.get(i) + "  "
+                                + StringUtils.rightPad(status.get(i), 6, " ") + "    "
+                                + StringUtils.rightPad(cpuUsage.get(i).substring(0, Math.min(5, cpuUsage.get(i).length())), 5, "0") + "%    "
+                                + StringUtils.rightPad(memUsage.get(i).substring(0, Math.min(5, memUsage.get(i).length())), 5, "0") + "%         "
+                                + StringUtils.rightPad(jobDuration.get(i), 12, " ") + "  "
+                                + jobName.get(i) + "\n";
+                    }
+                    message += "\n Data collected at: " + updateTime.get(0) + "\n";
+
+                } else {
+                    message += serverName.get(0) + "\n";
+                    message += type.getSerializedName() + "\n";
+                    // come back and add descriptions for each of these rather than the gibberish names
                 }
-                message += "\n Data collected at: "+updateTime.get(0)+"\n";
-
-            } else {
-                message += serverName.get(0)+"\n";
-                message += type.getSerializedName()+"\n";
-                // come back and add descriptions for each of these rather than the gibberish names
+            } catch (NullPointerException e){
+                System.out.println("Null pointer exception when reporting server state!!!");
+                message+="Error getting information!";
             }
-
 
             player.sendMessage(new TranslationTextComponent(message, new Object()), new UUID(16, 0));
 
