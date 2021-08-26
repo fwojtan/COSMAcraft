@@ -9,5 +9,6 @@
   "item.cosmacraft.data_tool": "Data Visualiser",
   "item.cosmacraft.door_tool": "Door Key",
   "itemGroup.COSMAcraft": "COSMAcraft",
-  "block.cosmacraft.empty_rack_block": "Empty Server Rack"
+  "block.cosmacraft.empty_rack_block": "Empty Server Rack",
+  "block.cosmacraft.archive_block": "Tape Archive"
 }

@@ -27,6 +27,9 @@ public class LargePowerTileEntity extends ParentTileEntity{
         offsetList.add(new Vector3i(2, 0, 0));
         offsetList.add(new Vector3i(2, 1, 0));
         offsetList.add(new Vector3i(2, 2, 0));
+        offsetList.add(new Vector3i(3, 0, 0));
+        offsetList.add(new Vector3i(3, 1, 0));
+        offsetList.add(new Vector3i(3, 2, 0));
 
 
         for (Vector3i vec : offsetList){
