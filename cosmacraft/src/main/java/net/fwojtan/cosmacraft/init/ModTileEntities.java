@@ -41,5 +41,10 @@ public class ModTileEntities {
             TileEntityType.Builder.of(EmptyRackTileEntity::new,
                     ModBlocks.EMPTY_RACK_BLOCK.get()).build(null));
 
+    public static final RegistryObject<TileEntityType<ArchiveTileEntity>> ARCHIVE_TILE_ENTITY
+            = Registration.TILE_ENTITY.register("archive_block", () ->
+            TileEntityType.Builder.of(ArchiveTileEntity::new,
+                    ModBlocks.ARCHIVE_BLOCK.get()).build(null));
+
     static void register() {}
 }

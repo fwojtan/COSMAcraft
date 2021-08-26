@@ -1,0 +1,12 @@
+{
+  "variants": {
+    "should_render=true,facing=north": {"model": "cosmacraft:block/archive_block"},
+    "should_render=true,facing=east": {"model": "cosmacraft:block/archive_block", "y": 90},
+    "should_render=true,facing=south": {"model": "cosmacraft:block/archive_block", "y": 180},
+    "should_render=true,facing=west": {"model": "cosmacraft:block/archive_block", "y": 270},
+    "should_render=false,facing=north": {"model": "minecraft:block/air"},
+    "should_render=false,facing=east": {"model": "minecraft:block/air"},
+    "should_render=false,facing=south": {"model": "minecraft:block/air"},
+    "should_render=false,facing=west": {"model": "minecraft:block/air"}
+  }
+}

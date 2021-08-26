@@ -24,6 +24,7 @@ public class ModBlocks {
     public static final RegistryObject<Block> SMALL_POWER_BLOCK = register("small_power_block", () -> new SmallPowerBlock());
     public static final RegistryObject<Block> LARGE_POWER_BLOCK = register("large_power_block", () -> new LargePowerBlock());
     public static final RegistryObject<Block> EMPTY_RACK_BLOCK = register("empty_rack_block", () -> new EmptyRackBlock());
+    public static final RegistryObject<Block> ARCHIVE_BLOCK = register("archive_block", () -> new ArchiveBlock());
 
 
     static void register() {}
