@@ -46,5 +46,15 @@ public class ModTileEntities {
             TileEntityType.Builder.of(ArchiveTileEntity::new,
                     ModBlocks.ARCHIVE_BLOCK.get()).build(null));
 
+    public static final RegistryObject<TileEntityType<PipeTileEntity>> PIPE_TILE_ENTITY
+            = Registration.TILE_ENTITY.register("pipe_block", () ->
+            TileEntityType.Builder.of(PipeTileEntity::new,
+                    ModBlocks.PIPE_BLOCK.get()).build(null));
+
+    public static final RegistryObject<TileEntityType<ExchangerTileEntity>> EXCHANGER_TILE_ENTITY
+            = Registration.TILE_ENTITY.register("exchanger_block", () ->
+            TileEntityType.Builder.of(ExchangerTileEntity::new,
+                    ModBlocks.EXCHANGER_BLOCK.get()).build(null));
+
     static void register() {}
 }
