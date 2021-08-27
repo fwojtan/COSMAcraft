@@ -72,8 +72,9 @@ public class ServerState {
                     message += "\n Data collected at: " + updateTime.get(0) + "\n";
 
                 } else {
-                    message += serverName.get(0) + "\n";
-                    message += type.getSerializedName() + "\n";
+                    message += type.displayName + "\n";
+                    message += "Codename: "+serverName.get(0) + "\n";
+                    message += type.description +"\n";
                     // come back and add descriptions for each of these rather than the gibberish names
                 }
             } catch (NullPointerException e){

@@ -1,14 +1,17 @@
 package net.fwojtan.cosmacraft.common.tileentity;
 
 import net.fwojtan.cosmacraft.init.ModTileEntities;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.math.vector.Vector3i;
+import net.minecraft.util.text.TranslationTextComponent;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 public class LargePowerTileEntity extends ParentTileEntity{
 
@@ -71,5 +74,10 @@ public class LargePowerTileEntity extends ParentTileEntity{
             default:
                 return new Vector3d(0.5d, 0.5d, 0d);
         }
+    }
+    public void sendInfo(PlayerEntity player){
+        String message = "Main Power Supply Unit \nThis unit controls the power grid that supplies COSMA with the electricity" +
+                "it needs. This power supply has to handle a serious amount of power to keep all of the processors running.";
+        player.sendMessage(new TranslationTextComponent(message, new Object()), new UUID(16, 0));
     }
 }

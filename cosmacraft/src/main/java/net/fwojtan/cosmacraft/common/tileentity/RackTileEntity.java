@@ -239,7 +239,7 @@ public class RackTileEntity extends ParentTileEntity {
 
     public void onUse(double yHit, double yAngle, ItemStack item, boolean shiftKeyDown, PlayerEntity player){
 
-        double serverOffset = 0.15;
+        double serverOffset = 0.135;
 
         // I think (?) the line below should correct the parallax error in the Y
         double serverHeight = yHit-getBlockPos().getY() - serverOffset * Math.tan(Math.acos(yAngle) - Math.PI / 2);

@@ -61,11 +61,13 @@ public class CosmaControlTileEntity extends ParentTileEntity{
     private final int cosmaPort = 5432;
     private Instant lastReceived = startTime.minus(1, ChronoUnit.HOURS);
     public boolean displayDataOverlay = false;
-    public boolean collectTimingData = true;
-    public List<List<Long>> timingData = new ArrayList<>();
+    //public boolean collectTimingData = true;
+    //public List<List<Long>> timingData = new ArrayList<>();
 
     @Override
     public void tick() {
+        /*
+        //timing data collection code for benchmarking
 
         if (collectTimingData && timingData.size() == 1000){
             collectTimingData = false;
@@ -84,6 +86,7 @@ public class CosmaControlTileEntity extends ParentTileEntity{
                 player.sendMessage(message, new UUID(16, 0));
             }
         }
+        */
 
 
         Instant timeNow = Instant.now();

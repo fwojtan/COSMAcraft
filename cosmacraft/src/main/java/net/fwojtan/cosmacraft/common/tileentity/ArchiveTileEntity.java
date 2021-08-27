@@ -1,14 +1,17 @@
 package net.fwojtan.cosmacraft.common.tileentity;
 
 import net.fwojtan.cosmacraft.init.ModTileEntities;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.math.vector.Vector3i;
+import net.minecraft.util.text.TranslationTextComponent;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 public class ArchiveTileEntity extends ParentTileEntity{
 
@@ -71,5 +74,11 @@ public class ArchiveTileEntity extends ParentTileEntity{
             default:
                 return new Vector3d(0.5d, 0.5d, 0d);
         }
+    }
+
+    public void sendInfo(PlayerEntity player){
+        String message = "Tape Archive \nThis large device is a magnetic tape storage archive. It uses a robot arm to" +
+                "pick tapes from shelves and loads data onto them for long term storage.";
+        player.sendMessage(new TranslationTextComponent(message, new Object()), new UUID(16, 0));
     }
 }

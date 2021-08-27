@@ -1,6 +1,8 @@
 package net.fwojtan.cosmacraft.common.block;
 
+import com.ibm.icu.util.CodePointTrie;
 import net.fwojtan.cosmacraft.common.tileentity.*;
+import net.fwojtan.cosmacraft.init.ModItems;
 import net.fwojtan.cosmacraft.init.ModTileEntities;
 import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.Block;
@@ -66,11 +68,29 @@ public class DummyBlock extends Block {
             if (tileEntity instanceof RackTileEntity) {
                 ((RackTileEntity) tileEntity).onUse(yHit, yAngle, player.getMainHandItem(), player.isShiftKeyDown(), player);
             } else if (tileEntity instanceof EmptyRackTileEntity){
-
+                if (player.getMainHandItem().sameItem(ModItems.INFO_TOOL.get().getDefaultInstance()) && tileEntity.getLevel().isClientSide()) {
+                    ((EmptyRackTileEntity) tileEntity).sendInfo(player);
+                }
             } else if (tileEntity instanceof LargePowerTileEntity){
-
+                if (player.getMainHandItem().sameItem(ModItems.INFO_TOOL.get().getDefaultInstance()) && tileEntity.getLevel().isClientSide()) {
+                    ((LargePowerTileEntity) tileEntity).sendInfo(player);
+                }
             } else if (tileEntity instanceof SmallPowerTileEntity){
-
+                if (player.getMainHandItem().sameItem(ModItems.INFO_TOOL.get().getDefaultInstance()) && tileEntity.getLevel().isClientSide()) {
+                    ((SmallPowerTileEntity) tileEntity).sendInfo(player);
+                }
+            } else if (tileEntity instanceof ExchangerTileEntity){
+                if (player.getMainHandItem().sameItem(ModItems.INFO_TOOL.get().getDefaultInstance()) && tileEntity.getLevel().isClientSide()) {
+                    ((ExchangerTileEntity) tileEntity).sendInfo(player);
+                }
+            } else if (tileEntity instanceof ArchiveTileEntity){
+                if (player.getMainHandItem().sameItem(ModItems.INFO_TOOL.get().getDefaultInstance()) && tileEntity.getLevel().isClientSide()) {
+                    ((ArchiveTileEntity) tileEntity).sendInfo(player);
+                }
+            } else if (tileEntity instanceof PipeTileEntity){
+                if (player.getMainHandItem().sameItem(ModItems.INFO_TOOL.get().getDefaultInstance()) && tileEntity.getLevel().isClientSide()) {
+                    ((PipeTileEntity) tileEntity).sendInfo(player);
+                }
             }
 
 

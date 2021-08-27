@@ -1,14 +1,17 @@
 package net.fwojtan.cosmacraft.common.tileentity;
 
 import net.fwojtan.cosmacraft.init.ModTileEntities;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.math.vector.Vector3i;
+import net.minecraft.util.text.TranslationTextComponent;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 public class EmptyRackTileEntity extends ParentTileEntity{
 
@@ -61,5 +64,11 @@ public class EmptyRackTileEntity extends ParentTileEntity{
             default:
                 return new Vector3d(0.5d, 0.5d, 0d);
         }
+    }
+
+    public void sendInfo(PlayerEntity player){
+        String message = "Empty Rack \nThis rack isn't currently being used for COSMA7 or COSMA8. It's included here to" +
+                "give you a sense of scale in the room.";
+        player.sendMessage(new TranslationTextComponent(message, new Object()), new UUID(16, 0));
     }
 }

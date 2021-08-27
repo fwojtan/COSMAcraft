@@ -50,7 +50,7 @@ public class RackTileEntityRenderer extends TileEntityRenderer<RackTileEntity> {
     public void render(RackTileEntity rackTileEntity, float partialTicks, MatrixStack matrixStack, IRenderTypeBuffer renderBuffers,
                        int combinedLight, int combinedOverlay) {
 
-        Instant startTime = Instant.now();
+        //Instant startTime = Instant.now();
 
         matrixStack.pushPose();
 
@@ -71,7 +71,8 @@ public class RackTileEntityRenderer extends TileEntityRenderer<RackTileEntity> {
         matrixStack.popPose();
 
 
-
+        /*
+        // timing data collection code for benchmarking
         CosmaControlTileEntity controlTileEntity = (CosmaControlTileEntity) rackTileEntity.getLevel().getBlockEntity(rackTileEntity.getControllerPosition());
         if (controlTileEntity != null){
             if (controlTileEntity.collectTimingData){
@@ -86,9 +87,10 @@ public class RackTileEntityRenderer extends TileEntityRenderer<RackTileEntity> {
 
             }
 
+
         }
 
-
+        */
 
 
     }
