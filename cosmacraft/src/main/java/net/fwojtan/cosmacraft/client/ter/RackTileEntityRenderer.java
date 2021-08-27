@@ -60,12 +60,12 @@ public class RackTileEntityRenderer extends TileEntityRenderer<RackTileEntity> {
         rotateStack(rackTileEntity.getBlockState().getValue(BlockStateProperties.HORIZONTAL_FACING), matrixStack);
         renderServerFrame(rackTileEntity, matrixStack, vertexBuffer, random, combinedLight, combinedOverlay);
         renderDoor(rackTileEntity, matrixStack, vertexBuffer, random, combinedLight, combinedOverlay);
+        renderInternalCables(rackTileEntity, matrixStack, renderBuffers, vertexBuffer, random, combinedLight, combinedOverlay);
+
 
         if (rackTileEntity.getListInitialized()) {
             renderServers(rackTileEntity, matrixStack, renderBuffers, vertexBuffer, random, combinedLight, combinedOverlay);
         }
-
-        Vector3f cableColor = new Vector3f(0.58f,0.50f,1.00f);
 
 
         matrixStack.popPose();
@@ -113,6 +113,19 @@ public class RackTileEntityRenderer extends TileEntityRenderer<RackTileEntity> {
                 if (rackTileEntity.doorOpen==1 && rackTileEntity.doorOpenProgress<50){rackTileEntity.doorOpenProgress++;}
                 if (rackTileEntity.doorOpen==0 && rackTileEntity.doorOpenProgress>0){rackTileEntity.doorOpenProgress--;}
 
+            }
+        }
+    }
+
+    private void renderInternalCables(RackTileEntity rackTileEntity, MatrixStack matrixStack, IRenderTypeBuffer renderBuffers, IVertexBuilder vertexBuffer, Random random, int combinedLight, int combinedOverlay){
+        if (rackTileEntity.doorOpen==1){
+            double height = 0;
+            for (ServerType serverType : rackTileEntity.serverTypes){
+                height += serverType.getUHeight();
+                for (CableProperties cableProperties : serverType.internalCableList) {
+                    double vertical = 0.057865d * height;
+                    renderCable(cableProperties.startPoint.add(0.0, vertical, 0.0), cableProperties.endPoint, matrixStack, renderBuffers, rackTileEntity, cableProperties.color);
+                }
             }
         }
     }
