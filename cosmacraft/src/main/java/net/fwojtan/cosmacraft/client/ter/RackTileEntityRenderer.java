@@ -118,7 +118,8 @@ public class RackTileEntityRenderer extends TileEntityRenderer<RackTileEntity> {
     }
 
     private void renderInternalCables(RackTileEntity rackTileEntity, MatrixStack matrixStack, IRenderTypeBuffer renderBuffers, IVertexBuilder vertexBuffer, Random random, int combinedLight, int combinedOverlay){
-        if (rackTileEntity.doorOpen==1){
+        boolean cableToggle = ((CosmaControlTileEntity) Objects.requireNonNull(Objects.requireNonNull(rackTileEntity.getLevel()).getBlockEntity(rackTileEntity.getControllerPosition()))).displayCables;
+        if (rackTileEntity.doorOpen==1 && cableToggle){
             double height = 0;
             for (ServerType serverType : rackTileEntity.serverTypes){
                 height += serverType.getUHeight();
@@ -131,6 +132,7 @@ public class RackTileEntityRenderer extends TileEntityRenderer<RackTileEntity> {
     }
 
     private void renderServers(RackTileEntity rackTileEntity, MatrixStack matrixStack, IRenderTypeBuffer renderBuffers, IVertexBuilder vertexBuffer, Random random, int combinedLight, int combinedOverlay){
+        boolean cableToggle = ((CosmaControlTileEntity) Objects.requireNonNull(Objects.requireNonNull(rackTileEntity.getLevel()).getBlockEntity(rackTileEntity.getControllerPosition()))).displayCables;
         if (rackTileEntity.serverStates.size() == rackTileEntity.serverTypes.size()) {
             //System.out.println("Raw brightness at"+rackTileEntity.getBlockPos().toString()+" :"+rackTileEntity.getLevel().getLightEngine().getRawBrightness(rackTileEntity.getBlockPos(), 0));
             for (int i = 0; i < rackTileEntity.serverTypes.size(); i++) {
@@ -165,9 +167,10 @@ public class RackTileEntityRenderer extends TileEntityRenderer<RackTileEntity> {
 
                     if (serverState.ejectProgress < 50 && serverState.ejected == 1) serverState.ejectProgress++;
                     if (serverState.ejected == 0 && serverState.ejectProgress > 0) serverState.ejectProgress--;
-
-                    for (CableProperties cableProperties : serverType.frontCableList) {
-                        renderCable(cableProperties.startPoint.add(ejectAmount), cableProperties.endPoint, matrixStack, renderBuffers, rackTileEntity, cableProperties.color);
+                    if (cableToggle) {
+                        for (CableProperties cableProperties : serverType.frontCableList) {
+                            renderCable(cableProperties.startPoint.add(ejectAmount), cableProperties.endPoint, matrixStack, renderBuffers, rackTileEntity, cableProperties.color);
+                        }
                     }
 
                     vertexBuffer = renderBuffers.getBuffer(RenderType.cutoutMipped());

@@ -12,5 +12,6 @@
   "block.cosmacraft.empty_rack_block": "Empty Server Rack",
   "block.cosmacraft.archive_block": "Tape Archive",
   "block.cosmacraft.pipe_block": "Coolant Pipes",
-  "block.cosmacraft.exchanger_block": "Heat Exchanger"
+  "block.cosmacraft.exchanger_block": "Heat Exchanger",
+  "item.cosmacraft.cable_toggle": "Toggle Cables"
 }

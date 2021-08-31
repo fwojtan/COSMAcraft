@@ -13,6 +13,7 @@ public class ModItems {
     public static final RegistryObject<Item> EJECT_TOOL = Registration.ITEMS.register("eject_tool", () -> new Item(new Item.Properties().tab(Registration.cosmaCraftItemGroup)));
     public static final RegistryObject<Item> DATA_TOOL = Registration.ITEMS.register("data_tool", () -> new Item(new Item.Properties().tab(Registration.cosmaCraftItemGroup)));
     public static final RegistryObject<Item> DOOR_TOOL = Registration.ITEMS.register("door_tool", () -> new Item(new Item.Properties().tab(Registration.cosmaCraftItemGroup)));
+    public static final RegistryObject<Item> CABLE_TOGGLE_TOOL = Registration.ITEMS.register("cable_toggle", () -> new Item(new Item.Properties().tab(Registration.cosmaCraftItemGroup)));
     static void register() {}
 
 }

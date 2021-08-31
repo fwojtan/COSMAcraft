@@ -22,11 +22,13 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.math.vector.Vector3i;
+import net.minecraft.util.text.TranslationTextComponent;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.UUID;
 
 public class RackTileEntity extends ParentTileEntity {
 
@@ -280,7 +282,18 @@ public class RackTileEntity extends ParentTileEntity {
         }
 
         else if (item.sameItem((ModItems.DATA_TOOL.get().getDefaultInstance()))){
+            if (!((CosmaControlTileEntity) Objects.requireNonNull(Objects.requireNonNull(this.getLevel()).getBlockEntity(this.controllerPosition))).displayDataOverlay && getLevel().isClientSide()){
+                String message = "This overlay shows the status of nodes. Green means a node is allocated (with the shade of green indicating CPU usage). Yellow means a node is draining or warning. Red means a node has failed. A normal colour just means the node is idle.";
+                player.sendMessage(new TranslationTextComponent(message, new Object()), new UUID(16, 0));
+            }
             ((CosmaControlTileEntity) Objects.requireNonNull(Objects.requireNonNull(this.getLevel()).getBlockEntity(this.controllerPosition))).displayDataOverlay ^= true;
+            getLevel().sendBlockUpdated(controllerPosition, getLevel().getBlockState(controllerPosition), getLevel().getBlockState(controllerPosition), 2);
+
+
+        }
+
+        else if (item.sameItem((ModItems.CABLE_TOGGLE_TOOL.get().getDefaultInstance()))){
+            ((CosmaControlTileEntity) Objects.requireNonNull(Objects.requireNonNull(this.getLevel()).getBlockEntity(this.controllerPosition))).displayCables ^= true;
             getLevel().sendBlockUpdated(controllerPosition, getLevel().getBlockState(controllerPosition), getLevel().getBlockState(controllerPosition), 2);
         }
 

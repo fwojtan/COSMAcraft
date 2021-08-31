@@ -61,6 +61,7 @@ public class CosmaControlTileEntity extends ParentTileEntity{
     private final int cosmaPort = 5432;
     private Instant lastReceived = startTime.minus(1, ChronoUnit.HOURS);
     public boolean displayDataOverlay = false;
+    public boolean displayCables = true;
     //public boolean collectTimingData = true;
     //public List<List<Long>> timingData = new ArrayList<>();
 
@@ -102,6 +103,7 @@ public class CosmaControlTileEntity extends ParentTileEntity{
                 firstTime=false;
                 verifyConnection();
                 fetchLatestConfigData();
+                ServerType.FOUR_U_GAP.printTypes();
             }
 
             // Do stuff here

@@ -13,7 +13,7 @@ import java.util.*;
 import static net.fwojtan.cosmacraft.common.block.ServerBlock.RENDER_CHOICE;
 
 public enum ServerType implements IStringSerializable {
-    ONE_U_GAP(0, "one_u_gap", "Empy space", "A gap between servers", 1, false, Collections.emptyList(), Collections.emptyList()),
+    ONE_U_GAP(0, "one_u_gap", "Empty space", "A gap between servers", 1, false, Collections.emptyList(), Collections.emptyList()),
     TWO_U_HEX(1, "two_u_hex", "General Purpose Dell Server","This server could be performing a number of tasks e.g. managing users, compiling code, managing storage systems or handling other administrative functions.",
             2, true, Collections.emptyList(), Arrays.asList(
             new CableProperties(0.75, 0.075, 1.05, 0.95, 0.2, 1.5, 0.8f, 0.3f, 0.5f),
@@ -33,9 +33,9 @@ public enum ServerType implements IStringSerializable {
             new CableProperties(0.85, 0.075, 1.05, 0.05, 1.8, 1.5, 0.4f, 0.4f, 0.4f),
             new CableProperties(0.185, 0.075, 1.05, 0.95, 0.4, 1.5, 1.0f, 0.4f, 0.4f)
             )),
-    ME_484(4, "me484", "Storage Server", "This server is used to provide disk space for COSMA's file system.",
+    ME_484(4, "me484", "Storage JBOD", "Stands for Just a Bunch Of Disks. This is literally a box full of hard drives which can be used by COSMA's other servers.",
             4, true, Collections.emptyList(), Collections.emptyList()),
-    MD_3420(5, "md3420", "Storage Server", "This server is used to provide disk space for COSMA's file system.",
+    MD_3420(5, "md3420", "Storage Controller", "Has disks and a controller for storage via a web interface. Provides redundancy in case a disk fails. ",
             4, true, Collections.emptyList(), Collections.emptyList()),
     R740_HEX_FLAT(6, "r740_hex_flat", "General Purpose Dell Server", "This server could be performing a number of tasks e.g. managing users, compiling code, managing storage systems or handling other administrative functions.",
             2, true, Collections.emptyList(), Collections.emptyList()), // this exists for direct comparison for benchmarking
@@ -64,7 +64,7 @@ public enum ServerType implements IStringSerializable {
     )),
 
     // the below need adding
-    MAD_03(8, "mad_03_server", "Mad Server", "This sever does something",
+    MAD_03(8, "mad_03_server", "‘Mad’ High RAM Server", "High RAM capability server. Used for work that requires exceptionally high memory capacity.",
             2, true, Collections.emptyList(), Collections.emptyList()), // 7525 - same as TWO_U_GA_SERVER (LOOKS LIKE 2U HEX)
     ETH_SWITCH(9, "ethernet_switch", "Ethernet Switch", "This Dell ethernet switch is used to connect parts of COSMA's internal network. For example, login nodes with compute nodes and the management system.",
             1, true, Arrays.asList(
@@ -99,12 +99,12 @@ public enum ServerType implements IStringSerializable {
             Arrays.asList(new CableProperties(0.25, 0.075, 1.05, 0.95, 1.4, 1.5, 0.4f, 0.4f, 0.4f))), // texture and model done
     HANDLEBAR_2U(11, "handlebar_2u", "General Purpose Dell Server", "This server could be performing a number of tasks e.g. managing users, compiling code, managing storage systems or handling other administrative functions.",
             2, true, Collections.emptyList(), Collections.emptyList()), //texture and model done
-    ME_484_2U(12, "me484_2u", "Storage Server", "This server is used to provide disk space for COSMA's file system.",
+    ME_484_2U(12, "me484_2u", "Storage JBOD", "Stands for Just a Bunch Of Disks. This is literally a box full of hard drives which can be used by COSMA's other servers.",
             2, true, Collections.emptyList(), Collections.emptyList()), // texture and model done
     LCDKVM(13, "lcdkvm", "Rack Mounted Management Console", "This console that looks a bit like a laptop is used to provide easy admin access to the system directly from the datacentre.",
             1, true, Collections.emptyList(), Collections.emptyList()),
 
-    DOUBLE_SQUARES(14, "double_squares", "A Server", "This sever does something",
+    DOUBLE_SQUARES(14, "double_squares", "Test and Development Server", "Not in day-to-day use, this is a server used for testing and development.",
             2, true, Collections.emptyList(), Collections.emptyList()), // texture and model done (IBM System x3650??...?)
     FOUR_U_GAP(15, "four_u_gap", "Empty space","A gap between servers", 4, false, Collections.emptyList(), Collections.emptyList()), // this is fine as is
     ONE_U_HEX(16, "one_u_hex", "General Purpose Dell Server", "This server could be performing a number of tasks e.g. managing users, compiling code, managing storage systems or handling other administrative functions.",
@@ -134,20 +134,20 @@ public enum ServerType implements IStringSerializable {
     R_6525(19, "r6525", "General Purpose Dell Server", "This server could be performing a number of tasks e.g. managing users, compiling code, managing storage systems or handling other administrative functions.",
             1, true, Collections.emptyList(), Collections.emptyList()), // texture and model done
 
-    ATEMPO(20, "atempo", "Atempo Server", "This sever does something",
+    ATEMPO(20, "atempo", "Atempo Server", "Archive and backup management server.",
             1, true, Collections.emptyList(), Collections.emptyList()), //R640 (look the same as the R6525)S
     C7_FIBRE_SWITCH(21, "fibre_switch", "COSMA7 Fibre Switch", "A fibre switch for COSMA7", 1, false, Collections.emptyList(), Collections.emptyList()),
-    FOUR_U_MI50(22, "mi50", "Gigabyte MI50 Server", "This sever does something",
+    FOUR_U_MI50(22, "mi50", "Gigabyte MI50 Server", "AMD GPU server for running GPU (graphical processing unit) code. Contains 6 GPUs.",
             4, true, Collections.emptyList(), Collections.emptyList()), // texture and model done Gigabyte server
-    TWO_U_GA_SERVER(23, "two_u_ga_server", "GA Server", "This sever does something",
+    TWO_U_GA_SERVER(23, "two_u_ga_server", "GA Server", "Originally GPU servers, these now do system monitoring and dashboard. ",
             2, true, Collections.emptyList(), Collections.emptyList()), //7525s (TWO U HEX or just horizontal drives??)
-    FOUR_U_CIRCLES(24, "four_u_circles", "A Server", "This sever does something",
+    FOUR_U_CIRCLES(24, "four_u_circles", "NVIDIA GPU Server", "Nvidia GPU server for running GPU (graphical processing unit) code. Contains 10 GPUs.",
             4, true, Collections.emptyList(), Collections.emptyList()), // texture and model done (DSS8440)
-    GREY_4U_SERVER(25, "grey_4u_server", "A Server", "This sever does something",
+    GREY_4U_SERVER(25, "grey_4u_server", "Composable PCIe Architecture Chassis", "Hosts GPUs to be composed onto different host servers. ",
             4, true, Collections.emptyList(), Collections.emptyList()), // texture and model done
     LOGIN_NODE_C8(26, "login_node_c8", "COSMA8 Login Node Server", "These servers host the login nodes for COSMA8. This is where users compile code and queue jobs for the compute nodes.",
             1, true, Collections.emptyList(), Collections.emptyList()), // texture and model done
-    C8_SWITCH(27, "ethernet_switch_c8", "COSMA8 Ethernet Switch", "\"This Dell ethernet switch is used to connect parts of COSMA's internal network. For example, login nodes with compute nodes and the management system.\"",
+    C8_SWITCH(27, "ethernet_switch_c8", "COSMA8 Ethernet Switch", "This Dell ethernet switch is used to connect parts of COSMA's internal network. For example, login nodes with compute nodes and the management system.",
             1, true, Arrays.asList(
             new CableProperties(0.75, 0.1, 0.135, 0.95, 0.015, 0.1, 0.5f, 0.3f, 6.0f),
             new CableProperties(0.70, 0.1, 0.135, 0.95, 0.015, 0.1, 0.5f, 0.3f, 5.0f),
@@ -216,5 +216,15 @@ public enum ServerType implements IStringSerializable {
                 return serverType;
             }
         } return null;
+    }
+
+    public void printTypes(){
+        System.out.println("Printing ServerTypes!!!");
+        String outString = "";
+        for (ServerType serverType : ServerType.values()){
+            outString += ("\n"+serverType.getSerializedName() + "\t "+ serverType.displayName + "\t " +
+                    serverType.getUHeight() + "\t " + serverType.description);
+        }
+        System.out.println(outString);
     }
 }
