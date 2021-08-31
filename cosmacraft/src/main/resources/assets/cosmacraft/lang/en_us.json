@@ -13,5 +13,6 @@
   "block.cosmacraft.archive_block": "Tape Archive",
   "block.cosmacraft.pipe_block": "Coolant Pipes",
   "block.cosmacraft.exchanger_block": "Heat Exchanger",
-  "item.cosmacraft.cable_toggle": "Toggle Cables"
+  "item.cosmacraft.cable_toggle": "Toggle Cables",
+  "item.cosmacraft.memory_chip": "HAL9000 Memory Unit"
 }
