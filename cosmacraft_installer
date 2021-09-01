@@ -1,0 +1,47 @@
+#! /bin/bash
+
+(
+echo "10"
+wget https://launcher.mojang.com/download/Minecraft.deb
+echo "50"
+sudo dpkg -i Minecraft.deb
+echo "95"
+sudo apt -f install
+
+) |
+zenity --progress --text="Downloading MC Launcher" --percentage=0 --no-cancel \
+--title="Cosmacraft Installer" --auto-close --width=300 --pulsate
+(
+minecraft-launcher > /tmp/stdout.$$ 2>/tmp/stderr.$$ &
+while :
+do 
+	sleep 2
+	if [ "$(grep -c "browser" /tmp/stderr.$$)" -ge 1 ]; then
+		echo "70"
+		sleep 3
+		kill $!
+		echo "95"
+		sleep 1
+		kill $!
+		break
+	fi 
+done
+) |
+zenity --progress --text="Configuring MC Launcher" --percentage=30 --no-cancel \
+--title="Cosmacraft Installer" --auto-close --width=300 --pulsate
+
+wget https://maven.minecraftforge.net/net/minecraftforge/forge/1.16.5-36.2.0/forge-1.16.5-36.2.0-installer.jar
+zenity --info --title="Cosmacraft Installer" --text="Click ok on the next installer that pops up! (And make sure 'Client' is selected...)" --width=500
+java -jar forge-1.16.5-36.2.0-installer.jar
+zenity --info --title="Cosmacraft Installer" --text="When the game launcher opens follow the following steps:\n1.  Login to Mojang/Microsoft Account\n2.  Click play on the Forge 1.16.5 profile and wait for the download\n 3.  Quit the game once it reaches the title screen" --width=500 --timeout=500 &
+sleep 4
+minecraft-launcher
+cp -r CosmacraftWorld ~/.minecraft/saves/CosmacraftWorld
+cp -r util ~/.minecraft
+cp cosmacraft_v0.1.jar ~/.minecraft/mods
+rm forge-1.16.5-36.2.0-installer.jar
+rm forge-1.16.5-36.2.0-installer.jar.log
+rm Minecraft.deb
+zenity --info --title="Cosmacraft Installer" --text="Setup Completed!" --timeout=15 --width=250
+minecraft-launcher
+exit 0
