@@ -1,0 +1,303 @@
+[
+	{
+		"id":"A7",
+		"x":6,
+		"y":0,
+		"z":1,
+		"facing":"EAST",
+		"servers":["C_6525", "C_6525", "C_6525", "C_6525", "C_6525", "C_6525", 
+		"ONE_U_GAP", "ETH_SWITCH", "MELLANOX_EDR", "C_6525", "C_6525", "C_6525", 
+		"C_6525", "C_6525", "C_6525", "DELL_PSU", "MELLANOX_EDR", "ONE_U_GAP", 
+		"C_6525", "C_6525", "C_6525", "C_6525", "MAD_03", "ETH_SWITCH", "MELLANOX_EDR"]
+		"frontDoor":"MESH",
+		"backDoor":"C7_BACK",
+		"rackStyle":"COSMA7"
+		
+		
+	},
+	{
+		"id":"A8",
+		"x":6,
+		"y":0,
+		"z":2,
+		"facing":"EAST",
+		"servers":["C_6525", "C_6525", "C_6525", "C_6525", "C_6525", "C_6525", 
+		"ONE_U_GAP", "ETH_SWITCH", "MELLANOX_EDR", "C_6525", "C_6525", "C_6525", 
+		"C_6525", "C_6525", "C_6525", "DELL_PSU", "MELLANOX_EDR", "ONE_U_GAP", 
+		"C_6525", "C_6525", "C_6525", "C_6525", "MAD_03", "ETH_SWITCH", "MELLANOX_EDR"]
+		"frontDoor":"MESH",
+		"backDoor":"C7_BACK",
+		"rackStyle":"COSMA7"
+	},
+	{
+		"id":"A1",
+		"x":6,
+		"y":0,
+		"z":3,
+		"facing":"EAST",
+		"servers":["C_6525", "C_6525", "C_6525", "C_6525", "C_6525", "C_6525", 
+		"ONE_U_GAP", "ETH_SWITCH", "MELLANOX_EDR", "C_6525", "C_6525", "C_6525", 
+		"C_6525", "C_6525", "C_6525", "DELL_PSU", "MELLANOX_EDR", "ONE_U_GAP", 
+		"C_6525", "C_6525", "C_6525", "C_6525", "ONE_U_HORIZONTAL_DRIVES", "ONE_U_GAP", 
+		"ETH_SWITCH", "MELLANOX_EDR"]
+		"frontDoor":"MESH",
+		"backDoor":"C7_BACK",
+		"rackStyle":"COSMA7"
+	},
+	{
+		"id":"A2",
+		"x":6,
+		"y":0,
+		"z":4,
+		"facing":"EAST",
+		"servers":["C_6525", "C_6525", "C_6525", "C_6525", "C_6525", "ONE_U_HORIZONTAL_DRIVES",
+		"DELL_PSU", "ONE_U_GAP", "ETH_SWITCH", "MELLANOX_EDR", "HANDLEBAR_2U", "ONE_U_HORIZONTAL_DRIVES", 
+		"ONE_U_HORIZONTAL_DRIVES", "ONE_U_HORIZONTAL_DRIVES", "ME_484_2U", "ONE_U_GAP", "LCDKVM", "DOUBLE_SQUARES", 
+		"HANDLEBAR_2U", "MELLANOX_EDR", "MELLANOX_EDR", "MELLANOX_EDR", "MELLANOX_EDR", "MELLANOX_EDR", "MELLANOX_EDR", 
+		"MELLANOX_EDR", "MELLANOX_EDR", "MELLANOX_EDR", "MELLANOX_EDR", "MELLANOX_EDR", "MELLANOX_EDR", "ONE_U_GAP", 
+		"ETH_SWITCH"]
+		"frontDoor":"MESH",
+		"backDoor":"C7_BACK",
+		"rackStyle":"COSMA7"
+	},
+	{
+		"id":"A3",
+		"x":6,
+		"y":0,
+		"z":5,
+		"facing":"EAST",
+		"servers":["C_6525", "C_6525", "C_6525", "C_6525", "C_6525", "C_6525", 
+		"ONE_U_GAP", "ETH_SWITCH", "MELLANOX_EDR", "C_6525", "C_6525", "C_6525", 
+		"C_6525", "C_6525", "C_6525", "DELL_PSU", "MELLANOX_EDR", "ONE_U_HORIZONTAL_DRIVES", 
+		"C_6525", "C_6525", "C_6525", "C_6525", "ONE_U_HORIZONTAL_DRIVES", "ONE_U_GAP", 
+		"ETH_SWITCH", "MELLANOX_EDR"]
+		"frontDoor":"MESH",
+		"backDoor":"C7_BACK",
+		"rackStyle":"COSMA7"
+	},
+	{
+		"id":"A4",
+		"x":6,
+		"y":0,
+		"z":6,
+		"facing":"EAST",
+		"servers":["C_6525", "C_6525", "C_6525", "C_6525", "C_6525", "C_6525", 
+		"ONE_U_GAP", "ETH_SWITCH", "MELLANOX_EDR", "C_6525", "C_6525", "C_6525", 
+		"C_6525", "C_6525", "C_6525", "DELL_PSU", "MELLANOX_EDR", "ATEMPO", 
+		"C_6525", "C_6525", "C_6525", "C_6525", "C7_FIBRE_SWITCH", "ONE_U_GAP", 
+		"ETH_SWITCH", "MELLANOX_EDR"]
+		"frontDoor":"MESH",
+		"backDoor":"C7_BACK",
+		"rackStyle":"COSMA7"
+	},
+	{
+		"id":"A5",
+		"x":6,
+		"y":0,
+		"z":7,
+		"facing":"EAST",
+		"servers":["C_6525", "C_6525", "C_6525", "C_6525", "C_6525", "C_6525", 
+		"ONE_U_GAP", "ETH_SWITCH", "MELLANOX_EDR", "C_6525", "C_6525", "C_6525", 
+		"C_6525", "C_6525", "C_6525", "DELL_PSU", "MELLANOX_EDR", "ATEMPO", 
+		"C_6525", "C_6525", "C_6525", "C_6525", "C7_FIBRE_SWITCH", "ONE_U_GAP", 
+		"ETH_SWITCH", "MELLANOX_EDR"]
+		"frontDoor":"MESH",
+		"backDoor":"C7_BACK",
+		"rackStyle":"COSMA7"
+	},
+	{
+		"id":"A6",
+		"x":6,
+		"y":0,
+		"z":8,
+		"facing":"EAST",
+		"servers":["C_6525", "C_6525", "C_6525", "C_6525", "C_6525", "C_6525", 
+		"ONE_U_GAP", "ETH_SWITCH", "MELLANOX_EDR", "C_6525", "C_6525", "C_6525", 
+		"C_6525", "C_6525", "C_6525", "DELL_PSU", "C_6525", "C_6525", "C_6525", 
+		"C_6525", "ETH_SWITCH", "ONE_U_GAP", "ETH_SWITCH", "ONE_U_GAP", "ETH_SWITCH",
+		"MELLANOX_EDR"]
+		"frontDoor":"MESH",
+		"backDoor":"C7_BACK",
+		"rackStyle":"COSMA7"
+	},
+	{
+		"id":"E1",
+		"x":9,
+		"y":0,
+		"z":1,
+		"facing":"WEST",
+		"servers":["FOUR_U_GAP", "MD_3420", "MD_3420", "ONE_U_HORIZONTAL_DRIVES", 
+		"ONE_U_HORIZONTAL_DRIVES", "ONE_U_HORIZONTAL_DRIVES", "ONE_U_HORIZONTAL_DRIVES",
+		"ONE_U_HORIZONTAL_DRIVES", "ONE_U_HORIZONTAL_DRIVES", "MD_3420", "MD_3420", "MD_3420",
+		"ONE_U_HORIZONTAL_DRIVES", "ONE_U_HORIZONTAL_DRIVES", "ONE_U_HORIZONTAL_DRIVES", 
+		"ONE_U_HORIZONTAL_DRIVES", "HANDLEBAR_2U", "HANDLEBAR_2U", "ONE_U_HEX", "ONE_U_HEX", 
+		"ONE_U_GAP", "ETH_SWITCH", "MELLANOX_EDR"]
+		"frontDoor":"NONE",
+		"backDoor":"STORAGE_BACK",
+		"rackStyle":"STORAGE"
+	},
+	{
+		"id":"E2",
+		"x":9,
+		"y":0,
+		"z":2,
+		"facing":"WEST",
+		"servers":["MD_3420", "MD_3420", "MD_3420", "ONE_U_HORIZONTAL_DRIVES", 
+		"ONE_U_HORIZONTAL_DRIVES", "ONE_U_HORIZONTAL_DRIVES", "ONE_U_HORIZONTAL_DRIVES",
+		"ONE_U_HORIZONTAL_DRIVES", "ONE_U_HORIZONTAL_DRIVES", "MD_3420", "MD_3420", "MD_3420",
+		"ONE_U_HORIZONTAL_DRIVES", "ONE_U_HORIZONTAL_DRIVES", "ONE_U_HORIZONTAL_DRIVES", 
+		"ONE_U_HORIZONTAL_DRIVES", "THREE_U_HEX", "THREE_U_HEX", "ONE_U_HORIZONTAL_DRIVES",
+		"ONE_U_HORIZONTAL_DRIVES", "MELLANOX_EDR"]
+		"frontDoor":"NONE",
+		"backDoor":"STORAGE_BACK",
+		"rackStyle":"STORAGE"
+	},
+	{
+		"id":"H5a",
+		"x":6,
+		"y":0,
+		"z":10,
+		"facing":"EAST",
+		"servers":[]
+		"frontDoor":"FLAT_MESH",
+		"backDoor":"C6_BACK",
+		"rackStyle":"STORAGE"
+	},
+	{
+		"id":"H5",
+		"x":6,
+		"y":0,
+		"z":11,
+		"facing":"EAST",
+		"servers":["ME_484", "ME_484", "ME_484", "ME_484", "ME_484", "ONE_U_HORIZONTAL_DRIVES",
+		"ONE_U_HORIZONTAL_DRIVES", "ONE_U_HORIZONTAL_DRIVES", "ONE_U_HORIZONTAL_DRIVES",
+		"ONE_U_HORIZONTAL_DRIVES", "MELLANOX_QUANT", "TWO_U_HEX", "TWO_U_HEX", 
+		"TWO_U_HEX", "TWO_U_HEX", "ME_484_2U", "C8_SWITCH"]
+		"frontDoor":"NONE",
+		"backDoor":"C8_BACK",
+		"rackStyle":"COSMA8"
+	},
+	{
+		"id":"H4",
+		"x":6,
+		"y":0,
+		"z":12,
+		"facing":"EAST",
+		"servers":["TWO_U_HEX", "FOUR_U_MI50", "TWO_U_GA_SERVER", "FOUR_U_CIRCLES",
+		"ONE_U_HORIZONTAL_DRIVES", "MELLANOX_QUANT", "ONE_U_HORIZONTAL_DRIVES", "ONE_U_HORIZONTAL_DRIVES",
+		"ONE_U_HORIZONTAL_DRIVES", "ONE_U_HORIZONTAL_DRIVES", "ONE_U_HORIZONTAL_DRIVES", 
+		"ONE_U_HORIZONTAL_DRIVES", "ONE_U_HORIZONTAL_DRIVES", "ONE_U_HORIZONTAL_DRIVES",
+		"ONE_U_HORIZONTAL_DRIVES", "ONE_U_HORIZONTAL_DRIVES", "ONE_U_HORIZONTAL_DRIVES",
+		"ONE_U_HORIZONTAL_DRIVES", "MELLANOX_QUANT", "ONE_U_HORIZONTAL_DRIVES", "ONE_U_HORIZONTAL_DRIVES",
+		"ONE_U_HORIZONTAL_DRIVES", "ONE_U_HORIZONTAL_DRIVES", "ONE_U_HORIZONTAL_DRIVES",
+		"ONE_U_HORIZONTAL_DRIVES", "ONE_U_HORIZONTAL_DRIVES", "ONE_U_HORIZONTAL_DRIVES",
+		"ONE_U_HORIZONTAL_DRIVES", "ONE_U_HORIZONTAL_DRIVES", "ONE_U_HORIZONTAL_DRIVES",
+		"ONE_U_HORIZONTAL_DRIVES", "C8_SWITCH"]
+		"frontDoor":"NONE",
+		"backDoor":"C8_BACK",
+		"rackStyle":"COSMA8"
+	},
+	{
+		"id":"H3",
+		"x":6,
+		"y":0,
+		"z":13,
+		"facing":"EAST",
+		"servers":["C_6525", "C_6525", "MELLANOX_QUANT", "C_6525", "C_6525", "C_6525",
+		"C8_SWITCH", "C_6525", "C_6525", "MELLANOX_QUANT", "C_6525", "C_6525", "C_6525",
+		"C_6525", "MELLANOX_QUANT", "C_6525", "C_6525", "C8_SWITCH", "C_6525", "C_6525",
+		"C_6525", "MELLANOX_QUANT", "C_6525", "C_6525"]	
+		"frontDoor":"NONE",
+		"backDoor":"C8_BACK",
+		"rackStyle":"COSMA8"
+	},
+	{
+		"id":"H2",
+		"x":6,
+		"y":0,
+		"z":14,
+		"facing":"EAST",
+		"servers":["C_6525", "C_6525", "MELLANOX_QUANT", "C_6525", "C_6525", "C_6525",
+		"C8_SWITCH", "C_6525", "C_6525", "MELLANOX_QUANT", "C_6525", "C_6525", "C_6525",
+		"C_6525", "MELLANOX_QUANT", "C_6525", "C_6525", "C8_SWITCH", "C_6525", "C_6525",
+		"C_6525", "MELLANOX_QUANT", "C_6525", "C_6525"]	
+		"frontDoor":"NONE",
+		"backDoor":"C8_BACK",
+		"rackStyle":"COSMA8"
+	},
+	{
+		"id":"H1",
+		"x":6,
+		"y":0,
+		"z":15,
+		"facing":"EAST",
+		"servers":["C_6525", "C_6525", "MELLANOX_QUANT", "C_6525", "C_6525", "C_6525",
+		"C8_SWITCH", "C_6525", "C_6525", "MELLANOX_QUANT", "C_6525", "C_6525", "C_6525",
+		"C_6525", "MELLANOX_QUANT", "C_6525", "C_6525", "C8_SWITCH", "C_6525", "C_6525",
+		"C_6525", "MELLANOX_QUANT", "C_6525", "C_6525"]	
+		"frontDoor":"NONE",
+		"backDoor":"C8_BACK",
+		"rackStyle":"COSMA8"
+	},
+	{
+		"id":"H6",
+		"x":1,
+		"y":0,
+		"z":15,
+		"facing":"WEST",
+		"servers":["C_6525", "C_6525", "MELLANOX_QUANT", "C_6525", "C_6525", "C_6525",
+		"C8_SWITCH", "C_6525", "C_6525", "MELLANOX_QUANT", "C_6525", "C_6525", "C_6525",
+		"C_6525", "MELLANOX_QUANT", "C_6525", "C_6525", "C8_SWITCH", "C_6525", "C_6525",
+		"C_6525", "MELLANOX_QUANT", "C_6525", "C_6525"]	
+		"frontDoor":"NONE",
+		"backDoor":"C8_BACK",
+		"rackStyle":"COSMA8"
+	},
+	{
+		"id":"H7",
+		"x":1,
+		"y":0,
+		"z":14,
+		"facing":"WEST",
+		"servers":["C_6525", "C_6525", "MELLANOX_QUANT", "C_6525", "C_6525", "C_6525",
+		"C8_SWITCH", "C_6525", "C_6525", "MELLANOX_QUANT", "C_6525", "C_6525", "C_6525",
+		"C_6525", "MELLANOX_QUANT", "C_6525", "C_6525", "C8_SWITCH", "C_6525", "C_6525",
+		"C_6525", "MELLANOX_QUANT", "C_6525", "C_6525"]	
+		"frontDoor":"NONE",
+		"backDoor":"C8_BACK",
+		"rackStyle":"COSMA8"
+	},
+	{
+		"id":"H8",
+		"x":1,
+		"y":0,
+		"z":13,
+		"facing":"WEST",
+		"servers":["FOUR_U_GAP", "ONE_U_GAP", "GREY_4U_SERVER", "C8_SWITCH", "LOGIN_NODE_C8",
+		"TWO_U_HEX", "MELLANOX_QUANT", "LOGIN_NODE_C8", "LOGIN_NODE_C8", "R_6525", "ME_484_2U",
+		"R_6525", "LCDKVM", "MELLANOX_QUANT", "MELLANOX_QUANT", "MELLANOX_QUANT", "MELLANOX_QUANT",
+		"MELLANOX_QUANT", "MELLANOX_QUANT", "MELLANOX_QUANT", "MELLANOX_QUANT",
+		"MELLANOX_QUANT", "MELLANOX_QUANT", "MELLANOX_QUANT", "MELLANOX_QUANT",
+		"MELLANOX_QUANT", "MELLANOX_QUANT", "MELLANOX_QUANT", "MELLANOX_QUANT",
+		"MELLANOX_QUANT", "MELLANOX_QUANT", "MELLANOX_QUANT", "MELLANOX_QUANT", "C8_SWITCH"]	
+		"frontDoor":"NONE",
+		"backDoor":"C8_BACK",
+		"rackStyle":"COSMA8"
+	}
+	{
+		"id":"H9",
+		"x":1,
+		"y":0,
+		"z":12,
+		"facing":"WEST",
+		"servers":["C_6525", "C_6525", "MELLANOX_QUANT", "C_6525", "C_6525", "C_6525",
+		"C8_SWITCH", "C_6525", "C_6525", "MELLANOX_QUANT", "C_6525", "C_6525", "C_6525",
+		"C_6525", "MELLANOX_QUANT", "C_6525", "C_6525", "C8_SWITCH", "C_6525", "C_6525",
+		"C_6525", "MELLANOX_QUANT", "C_6525", "C_6525"]	
+		"frontDoor":"NONE",
+		"backDoor":"C8_BACK",
+		"rackStyle":"COSMA8"
+	},
+	
+	
+]
