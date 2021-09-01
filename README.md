@@ -9,7 +9,7 @@ Demo video: https://www.youtube.com/watch?v=JGUwQR4u91o
 
 ## User Guide
 
-See "COSMACRAFT USER GUIDE.pdf"
+See "COSMACRAFT User Guide.pdf"
 
 ## Installation
 
@@ -17,7 +17,7 @@ See "COSMACRAFT USER GUIDE.pdf"
 
 1. Install Minecraft 1.16.5 and Forge 36.2.0 using either CurseForge (https://download.curseforge.com) or installing Minecraft directly and running the Forge installer (https://files.minecraftforge.net/net/minecraftforge/forge/index_1.16.5.html). 
 2. Run the game to create a blank profile.
-3. Copy cosmacraft_v1.x.jar into the mods folder.
+3. Copy cosmacraft-1.x.jar into the mods folder.
 4. Copy the COSMAcraft World directory into the saves folder.
 5. Copy the utils directory (containing the cosma_usage json and the cosma_config json) into the Minecraft game directory (the directory containing "saves" and "mods").
 6. Relaunch the game and it should now load with COSMAcraft installed. 
